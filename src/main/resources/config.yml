@@ -1,0 +1,152 @@
+#   ---Plugin by niklas1623---
+#
+#   Copyright © 2021 niklas1623. Alle Rechte vorbehalten.
+#
+# %prefix% ist das Plugin Prefix
+# %amount% gibt die Menge an
+# %price% ist der Preis
+# %item% ist das Item im Shop
+#
+#
+
+Prefix: '&b&lServershop &8»&r'
+
+#Um dieses Plugin verwenden zu können brauchst du eine MySQL Datenbank!
+
+Database:
+  username: username
+  password: password
+  database: servershop
+  host: localhost
+  port: '3306'
+  Options: "?autoReconnect=true&useSSL=false&AllowPublicKeyRetrieval=true&verifyServerCertificate=true"
+
+Settings:
+  Servershop:
+      Name: "&b&lServershop"
+  ItemBuy:
+    Name: "&5&lItems kaufen"
+    Desc: "&7Kaufe Items im Servershop!"
+  ItemSell:
+    Name: "&3&lItems verkaufen"
+    Desc: "&7Verkaufe deine Items im Servershop"
+  Decoration:
+    BorderItem: "BLACK_STAINED_GLASS_PANE"
+    BottomItem: "BLACK_STAINED_GLASS_PANE"
+    FillingItem: "WHITE_STAINED_GLASS_PANE"
+  Items:
+    Next:
+      Name: "&c&oWeiter"
+      Item: "ARROW"
+    Previous:
+      Name: "&c&oZurück"
+      Item: "ARROW"
+    CurrentMoney:
+      Name: "&6&lAktueller Kontostand"
+      Item: "GOLD_INGOT"
+    OneMenuBack:
+      Name: "&c&lHauptmenü"
+      Item: "RED_BED"
+    Accept:
+      Item: "LIME_DYE"
+      Name: "&a&lKaufen"
+    Deny:
+      Item: "RED_DYE"
+      Name: "&c&lAbbrechen"
+    Sell:
+      Item: "SUNFLOWER"
+      Name: "&7Verkaufen für: &e%price%"
+      Desc: ""
+
+  menu-items:
+    1:
+      Enabled: true
+      Slot: 10
+      Item: "OAK_WOOD"
+      Desc: "&7Kaufe Baumerzeugnisse"
+      Name: '&a&lBäume'
+      Permission: "servershop.menu.1"
+    2:
+      Enabled: true
+      Slot: 12
+      Item: 'SAND'
+      Desc: ""
+      Name: '&3&lSand'
+      Permission: "servershop.menu.2"
+    3:
+      Enabled: true
+      Slot: 14
+      Item: 'DIRT'
+      Desc: "&7...weitere vorhanden"
+      Name: '&2&lErde'
+      Permission: "servershop.menu.3"
+    4:
+      Enabled: true
+      Slot: 16
+      Item: 'CYAN_CONCRETE'
+      Desc: ""
+      Name: '&b&lBeton'
+      Permission: "servershop.menu.4"
+    5:
+      Enabled: true
+      Slot: 20
+      Item: 'DIAMOND'
+      Desc: ""
+      Name: '&7&lErze'
+      Permission: "servershop.menu.5"
+    6:
+      Enabled: true
+      Slot: 22
+      Item: 'COOKED_BEEF'
+      Desc: ""
+      Name: '&6&lEssen'
+      Permission: "servershop.menu.6"
+    7:
+      Enabled: true
+      Slot: 24
+      Item: 'REDSTONE'
+      Desc: ""
+      Name: '&4&lRedstone'
+      Permission: "servershop.menu.7"
+    8:
+      Enabled: true
+      Slot: 28
+      Item: 'END_STONE'
+      Desc: ""
+      Name: '&6&lEnd'
+      Permission: "servershop.menu.8"
+    9:
+      Enabled: true
+      Slot: 30
+      Item: 'NETHERRACK'
+      Desc: ""
+      Name: '&c&lNether'
+      Permission: "servershop.menu.9"
+    10:
+      Enabled: true
+      Slot: 32
+      Item: 'HORN_CORAL_BLOCK'
+      Desc: ""
+      Name: '&e&lKorallen'
+      Permission: "servershop.menu.10"
+    11:
+      Enabled: true
+      Slot: 34
+      Item: 'BEDROCK'
+      Desc: ""
+      Name: '&8&lSonstiges'
+      Permission: "servershop.menu.11"
+    12:
+      Enabled: true
+      Slot: 38
+      Item: 'POPPY'
+      Desc: ""
+      Name: '&d&lBlumen'
+      Permission: "servershop.menu.12"
+    13:
+      Enabled: true
+      Slot: 42
+      Item: 'LIGHT_BLUE_DYE'
+      Desc: ""
+      Name: '&3&lFarbstoffe'
+      Permission: "servershop.menu.13"

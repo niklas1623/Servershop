@@ -1,0 +1,39 @@
+#   ---Plugin by niklas1623---
+#
+#   Copyright © 2021 niklas1623. Alle Rechte vorbehalten.
+#
+# %prefix% ist das Plugin Prefix
+# %amount% gibt die Menge an
+# %price% ist der Preis
+# %item% ist das Item im Shop
+#
+#
+
+NoMoney: "%prefix% &7Leider hast du &cnicht &7genug Credits!"
+NoItem: "%prefix% &7Du hast &cnicht &7genug &e%item% &7in deinem Inventar!"
+NoPerm: "%prefix% &7Dazu hast du &ckeine &7Berechtigung!"
+NoSpace: "%prefix% &7Dein Iventar ist &cvoll&7!"
+ItemBuy: "%prefix% &7Du hast &aerfolgreich &e%amount% &o%item% &7für &c%price% &7gekauft."
+ItemSell: "%prefix% &7Du hast &aerfolgreich &e%amount% &o%item% &7für &c%price% &7verkauft."
+AddItem: "%prefix% &7Du hast &c%amount% &e%item% &7für &e%price%c &ahinzugefügt&7."
+RemoveItem: "%prefix% &7Du hast &e%item% &centfernt&7."
+ComingSoon: "%prefix% &cComing Soon!"
+HowToAdd: "%prefix% &7Nutze /shop add <ShopType> <category> <price>"
+HowToRemove: "%prefix% &7Nutze /shop remove <ShopType>"
+HowToEdit: "%prefix% &7Nutze /shop edit ShopType Price/Amount <price/amount>"
+HowToGetID: "%prefix% &7Nutze /shop getid : Halte dabei ein Item in deiner Hand!"
+OnlyPlayer: "%prefix% &cDu musst ein Spieler sein!"
+UseCategory: "%prefix% &7Nutze eine Kategorie:"
+PriceNull: "%prefix% &7Der Preis darf nicht 0.0 oder kleiner sein!"
+NoAIR: "%prefix% &7Du kannst AIR nicht benutzen! Du musst ein Item in der Hand halten!"
+AlreadyInShop: "%prefix% &7Dieses Item ist bereits im Shop!"
+NotInShop: "%prefix% &7Dieses Item ist &cnicht &7im Shop!"
+WrongAmount: "%prefix% &7Die Menge darf &cnicht &e0 &7und drunter sein!"
+ChangedPrice: "%prefix% &7Du hast den Preis von &e%item% &7in &e%price% &ageändert&7!"
+ChangedAmount: "%prefix% &7Du hast die Menge von &e%item% &7in &e%amount% &ageändert&7!"
+IDforItem: "%prefix% &7Die ID für &e%item% &7ist &e%id%&7!"
+Help: "%prefix% &7Nutze /shop help"
+Reload: "%prefix% &7Die Config wurde neu geladen!"
+NotAvailable: "%prefix% &7Der Shop ist derzeit &cnicht &7verfügbar!"
+HowToSearch: "%prefix% &7Nutze /shop search <input>"
+NotFound: "%prefix% &7Zu deiner Suche: &e&o%input%&7, konnte &cnichts &7gefunden werden!"
