@@ -34,17 +34,18 @@ public class SellManager {
     public static double calculateTotalValue(Inventory inventory) {
         double total = 0;
         for (ItemStack itemStack : InventoryManager.sellShop.getInventory().getContents()) {
-            //int ItemID = ShopManager.getItemID(itemStack.getType().name());
-            int ItemID = 2;
-            IDinShop = ShopManager.getIDinShop("s", ItemID);
-            int amount = ShopManager.getAmount(IDinShop);
-            double price = ShopManager.getPrice(IDinShop);
-            double price_for_one = price/amount;
-            int cal_amount = itemStack.getAmount();
+            if (!itemStack.getType().equals(null)) {
+                //int ItemID = ShopManager.getItemID(itemStack.getType().name());
+                int ItemID = 2;
+                IDinShop = ShopManager.getIDinShop("s", ItemID);
+                int amount = ShopManager.getAmount(IDinShop);
+                double price = ShopManager.getPrice(IDinShop);
+                double price_for_one = price / amount;
+                int cal_amount = itemStack.getAmount();
 
-
-            if (price_for_one != 0)
-                total = total + (price_for_one*cal_amount);
+                if (price_for_one != 0)
+                total = total + (price_for_one * cal_amount);
+            }
         }
         return total;
     }
