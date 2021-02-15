@@ -71,7 +71,7 @@ public class ShopCommands implements CommandExecutor {
                                                         ItemID = ShopManager.getItemID(mat);
                                                         if (!(ShopManager.checkItemInShop(ItemID, ShopType) == 1)) {
                                                             ShopManager.addItemToShop(ItemID, amount, price, ShopType, category);
-                                                            sender.sendMessage(plugin.AddItem.replaceAll("%amount%", amount + "").replaceAll("%price%", price + "").replaceAll("%item%", mat.toLowerCase()));
+                                                            sender.sendMessage(plugin.AddItem.replaceAll("%amount%", amount + "").replaceAll("%price%", plugin.econ.format(price) + "").replaceAll("%item%", mat.toLowerCase()));
                                                         } else sender.sendMessage(plugin.AlreadyInShop);
                                                         return true;
                                                     } else {
@@ -79,7 +79,7 @@ public class ShopCommands implements CommandExecutor {
                                                         ItemID = ShopManager.getItemID(mat);
                                                         if (!(ShopManager.checkItemInShop(ItemID, ShopType) == 1)) {
                                                             ShopManager.addItemToShop(ItemID, amount, price, ShopType, category);
-                                                            sender.sendMessage(plugin.AddItem.replaceAll("%amount%", amount + "").replaceAll("%price%", price + "").replaceAll("%item%", mat.toLowerCase()));
+                                                            sender.sendMessage(plugin.AddItem.replaceAll("%amount%", amount + "").replaceAll("%price%", plugin.econ.format(price) + "").replaceAll("%item%", mat.toLowerCase()));
                                                         } else sender.sendMessage(plugin.AlreadyInShop);
                                                         return true;
                                                     }
@@ -119,7 +119,7 @@ public class ShopCommands implements CommandExecutor {
                                                     if (Double.parseDouble(args[3]) > 0) {
                                                         price = Double.parseDouble(args[3]);
                                                         ShopManager.updatePrice(ItemID, ShopType, price);
-                                                        sender.sendMessage(plugin.ChangedPrice.replaceAll("%price%", price + "").replaceAll("%item%", mat.toLowerCase()));
+                                                        sender.sendMessage(plugin.ChangedPrice.replaceAll("%price%", plugin.econ.format(price) + "").replaceAll("%item%", mat.toLowerCase()));
                                                     } else sender.sendMessage(plugin.PriceNull);
                                                     return true;
                                                 } else if (args[2].equalsIgnoreCase("amount")) {

@@ -13,9 +13,7 @@ import org.bukkit.event.Listener;
 import de.niklas1623.servershop.Main;
 import me.mattstudios.mfgui.gui.guis.Gui;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
-import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +26,7 @@ public class InventoryManager implements Listener {
     public static int Category;
 
     public static Gui menuItem = new Gui(6,  Main.getInstance().ServershopName);
-    public static PersistentGui sellShop = new PersistentGui(6, pl.ItemSellName);
+    public static Gui sellShop = new Gui(6, pl.ItemSellName);
 
 
     public static void openServershop(Player player) {
@@ -162,28 +160,24 @@ public class InventoryManager implements Listener {
 
 
 
-        sellShop.open(player);
+
         sellShop.setOpenGuiAction(event -> {
             SellManager.runTask();
         });
+        sellShop.open(player);
         sellShop.setCloseGuiAction(event -> {
-            Bukkit.getScheduler().cancelTask(SellManager.task);
-            for (int row = 1; row < 5; row++) {
-                for (int col = 1; col < 8; col++) {
-                    ItemStack itemStack = sellShop.getInventory().getItem(col + row * 9);
-                    if (itemStack != null && itemStack.getType() != Material.AIR)
-                        returnItem(player, itemStack);
-                }
-            }
+
         });
     }
 
     public static void returnItem(Player player, ItemStack itemStack) {
-        if (itemStack == null)
+        if (itemStack == null){
             return;
-        Map<Integer, ItemStack> overfilled = player.getInventory().addItem(new ItemStack[] { itemStack });
-        if (!overfilled.isEmpty())
+        }
+        Map<Integer, ItemStack> overfilled = player.getInventory().addItem(itemStack);
+        if (!overfilled.isEmpty()){
             overfilled.values().forEach(item2 -> player.getWorld().dropItemNaturally(player.getLocation(), item2));
+        }
     }
 
     public static void openBuyShop(Player player) {

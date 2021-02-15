@@ -156,6 +156,8 @@ public class ShopManager {
             while (rs.next()){
                 return rs.getString("Material");
             }
+            ps.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
