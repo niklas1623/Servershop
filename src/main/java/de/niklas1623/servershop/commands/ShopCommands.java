@@ -199,6 +199,7 @@ public class ShopCommands implements CommandExecutor {
                             sender.sendMessage(plugin.HowToRemove);
                         } else if(args[0].equalsIgnoreCase("reload")){
                             if (sender.hasPermission("servershop.reload") || sender.hasPermission("servershop.*")) {
+                                plugin.reloadConfig();
                                 ConfigManager.readConfig();
                                 ConfigManager.readMessages();
                                 sender.sendMessage(plugin.Reload);

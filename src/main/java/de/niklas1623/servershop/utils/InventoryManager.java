@@ -97,7 +97,8 @@ public class InventoryManager implements Listener {
                 price = ShopManager.getPrice(itemlist.get(i));
                 material = ShopManager.getMaterial(itemlist.get(i));
                 shopItem.addItem(ItemBuilder.from(Material.valueOf(material.toUpperCase())).setAmount(amount).setLore("§7" + Main.econ.format(price)).asGuiItem(event -> {
-                    openBuyShop(player);
+                    String material = event.getCurrentItem().getType().name();
+                    openBuyShop(player, material);
                 }));
             }
             shopItem.open(player);
@@ -130,7 +131,8 @@ public class InventoryManager implements Listener {
                     material = ShopManager.getMaterial(IDinShop);
                     if (!(IDinShop == 0)){
                         shopItem.addItem(ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7" + Main.econ.format(price)).asGuiItem(event -> {
-                            openBuyShop(player);
+                            String material = event.getCurrentItem().getType().name();
+                            openBuyShop(player, material);
                         }));
                     }
             }
@@ -180,7 +182,7 @@ public class InventoryManager implements Listener {
         }
     }
 
-    public static void openBuyShop(Player player) {
+    public static void openBuyShop(Player player, String material) {
         Gui gui = new Gui(4, pl.ItemBuyName);
         gui.setDefaultClickAction(event -> {
             event.setCancelled(true);
@@ -191,15 +193,16 @@ public class InventoryManager implements Listener {
         }));
         gui.setItem(4,5 , ItemBuilder.from(Material.valueOf(pl.CurrentMoneyItem)).setName(pl.CurrentMoney).setLore("§e"+Main.econ.format(Main.econ.getBalance(player))).asGuiItem());
 
-        gui.setItem(2, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(100).setLore("§7"+pl.econ.format(price)).asGuiItem());
+        gui.setItem(2, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7"+pl.econ.format(price)).asGuiItem());
 
         gui.setItem(2, 3, ItemBuilder.from(Material.valueOf(pl.AcceptItem)).setName(pl.AcceptName).asGuiItem(event -> {
 
             if (pl.econ.getBalance(player) >= price) {
                 if (!(player.getInventory().firstEmpty() == -1)){
-                    player.getInventory().addItem(new ItemStack(Material.valueOf(material), 100));
+                    player.getInventory().addItem(new ItemStack(Material.valueOf(material), amount));
                     pl.econ.withdrawPlayer(player, price);
                     player.sendMessage(pl.ItemBuy.replaceAll("%amount%", amount+"").replaceAll("%item%", material.toLowerCase()).replaceAll("%price%", pl.econ.format(price)));
+                    gui.updateItem(4,5 , ItemBuilder.from(Material.valueOf(pl.CurrentMoneyItem)).setName(pl.CurrentMoney).setLore("§e"+Main.econ.format(Main.econ.getBalance(player))).asGuiItem());
                 } else {
                     player.closeInventory();
                     player.sendMessage(pl.NoSpace);
@@ -210,7 +213,7 @@ public class InventoryManager implements Listener {
             }
         }));
         gui.setItem(2, 7, ItemBuilder.from(Material.valueOf(pl.DenyItem)).setName(pl.DenyName).asGuiItem(event -> {
-            player.closeInventory();
+            selectMenu(player);
         }));
 
 
