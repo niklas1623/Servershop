@@ -59,7 +59,7 @@ public class ShopCommands implements CommandExecutor {
                             if (sender.hasPermission("servershop.add") || sender.hasPermission("servershop.*")) {
                                 if (args.length == 4) {
                                     if (args[1].equalsIgnoreCase("s") || args[1].equalsIgnoreCase("b")) {
-                                        if (Integer.valueOf(args[2]) <= list.size()) {
+                                        if (Integer.valueOf(args[2]) <= list.size() && Integer.valueOf(args[3]) != 0) {
                                             if (Double.parseDouble(args[3]) > 0) {
                                                 ShopType = args[1];
                                                 category = Integer.valueOf(args[2]);
@@ -102,7 +102,7 @@ public class ShopCommands implements CommandExecutor {
                             return true;
                             /**
                              * Edit Command for price or amount
-                             * /shop edit ShopID Price/Amount <price/amount>
+                             * /shop edit ShopID Price/Amount/Category <price/amount/category>
                              */
                         } else if (args[0].equalsIgnoreCase("edit")){
                             if (sender.hasPermission("servershop.edit") || sender.hasPermission("servershop.*")) {
@@ -130,6 +130,19 @@ public class ShopCommands implements CommandExecutor {
                                                         sender.sendMessage(plugin.ChangedAmount.replaceAll("%amount%", amount + "").replaceAll("%item%", mat.toLowerCase()));
                                                     } else sender.sendMessage(plugin.WrongAmount);
                                                     return true;
+                                                } else if (args[2].equalsIgnoreCase("category")) {
+                                                    if (Integer.valueOf(args[3]) <= list.size() && Integer.valueOf(args[3]) != 0) {
+                                                        ShopType = args[1];
+                                                        category =  Integer.valueOf(args[3]);
+                                                        ShopManager.updateCategory(ItemID, ShopType, category);
+                                                        sender.sendMessage(plugin.ChangedCategory.replaceAll("%category%", String.valueOf(category)));
+                                                    } else {
+                                                        sender.sendMessage(plugin.UseCategory);
+                                                        for (Integer key : list.keySet()) {
+                                                            sender.sendMessage("§c" + key + " §7" + list.get(key));
+                                                        }
+                                                        return true;
+                                                    }
                                                 } else sender.sendMessage(plugin.HowToEdit);
                                                 return true;
                                             } else sender.sendMessage(plugin.NotInShop);
@@ -178,15 +191,15 @@ public class ShopCommands implements CommandExecutor {
                              * /shop getid
                              */
                         } else if(args[0].equalsIgnoreCase("getid")) {
-                            if(sender.hasPermission("servershop.getid") || sender.hasPermission("servershop.*")) {
-                                if (args.length == 1){
-                                material = inv.getItemInMainHand().getType();
-                                mat = material.name();
-                                ItemID = ShopManager.getItemID(mat);
-                                if (!(material == Material.AIR)) {
-                                    sender.sendMessage(plugin.IDforItem.replaceAll("%item%", mat.toLowerCase()).replaceAll("%id%", ItemID + ""));
-                                } else sender.sendMessage(plugin.NoAIR);
-                                return true;
+                            if (sender.hasPermission("servershop.getid") || sender.hasPermission("servershop.*")) {
+                                if (args.length == 1) {
+                                    material = inv.getItemInMainHand().getType();
+                                    mat = material.name();
+                                    ItemID = ShopManager.getItemID(mat);
+                                    if (!(material == Material.AIR)) {
+                                        sender.sendMessage(plugin.IDforItem.replaceAll("%item%", mat.toLowerCase()).replaceAll("%id%", ItemID + ""));
+                                    } else sender.sendMessage(plugin.NoAIR);
+                                    return true;
                                 } else sender.sendMessage(plugin.HowToGetID);
                                 return true;
                             } else sender.sendMessage(plugin.NoPerm);

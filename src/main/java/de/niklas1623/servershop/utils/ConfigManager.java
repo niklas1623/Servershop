@@ -113,6 +113,7 @@ public class ConfigManager {
         pl.NotAvailable = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("NotAvailable").replaceAll("%prefix%", pl.prefix));
         pl.HowToSearch = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("HowToSearch").replaceAll("%prefix%", pl.prefix));
         pl.NotFound = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("NotFound").replaceAll("%prefix%", pl.prefix));
+        pl.ChangedCategory = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("ChangedCategory").replaceAll("%prefix%", pl.prefix));
     }
 
 }

@@ -30,6 +30,7 @@ public class onTabShopCommands implements TabCompleter {
         List<String> list4 = new ArrayList<>();
         list4.add("price");
         list4.add("amount");
+        list4.add("category");
 
         if (cmd.getName().equalsIgnoreCase("shop")){
             if (args.length == 1){

@@ -2,16 +2,14 @@ package de.niklas1623.servershop.utils;
 
 import de.niklas1623.servershop.commands.ShopCommands;
 import me.mattstudios.mfgui.gui.components.ItemBuilder;
-import me.mattstudios.mfgui.gui.guis.GuiItem;
-import me.mattstudios.mfgui.gui.guis.PaginatedGui;
-import me.mattstudios.mfgui.gui.guis.PersistentGui;
+import me.mattstudios.mfgui.gui.guis.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import de.niklas1623.servershop.Main;
-import me.mattstudios.mfgui.gui.guis.Gui;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ public class InventoryManager implements Listener {
     public static int Category;
 
     public static Gui menuItem = new Gui(6,  Main.getInstance().ServershopName);
-    public static Gui sellShop = new Gui(6, pl.ItemSellName);
+    //public static Gui sellShop;
 
 
     public static void openServershop(Player player) {
@@ -79,26 +77,27 @@ public class InventoryManager implements Listener {
     }
 
     public static void selectBuyItem(Player player){
-        PaginatedGui shopItem = new PaginatedGui(3,18, MenuManager.Category_Name);
+        PaginatedGui shopItem = new PaginatedGui(4,27, MenuManager.Category_Name);
 
         shopItem.getFiller().fillBottom(ItemBuilder.from(Material.valueOf(pl.BottomItem)).setName(" ").asGuiItem());
         shopItem.setDefaultClickAction(event -> {
             event.setCancelled(true);
         });
-        shopItem.setItem(3,3, ItemBuilder.from(Material.valueOf(pl.PreviousPageItem)).setName(pl.PreviousPage).asGuiItem(event -> shopItem.previous()));
-        shopItem.setItem(3,7, ItemBuilder.from(Material.valueOf(pl.NextPageItem)).setName(pl.NextPage).asGuiItem(event -> shopItem.next()));
-        shopItem.setItem(3,1, ItemBuilder.from(Material.valueOf(pl.OneMenuBackItem)).setName(pl.OneMenuBack).asGuiItem(event -> {
+        shopItem.setItem(4,3, ItemBuilder.from(Material.valueOf(pl.PreviousPageItem)).setName(pl.PreviousPage).asGuiItem(event -> shopItem.previous()));
+        shopItem.setItem(4,7, ItemBuilder.from(Material.valueOf(pl.NextPageItem)).setName(pl.NextPage).asGuiItem(event -> shopItem.next()));
+        shopItem.setItem(4,1, ItemBuilder.from(Material.valueOf(pl.OneMenuBackItem)).setName(pl.OneMenuBack).asGuiItem(event -> {
             selectMenu(player);
         }));
         List<Integer> itemlist = ShopManager.getItems(MenuManager.ClickedCategory, "b");
         if (!(itemlist.size() == 0)) {
             for (int i = 0; i < itemlist.size(); i++) {
-                amount = ShopManager.getAmount(itemlist.get(i));
-                price = ShopManager.getPrice(itemlist.get(i));
-                material = ShopManager.getMaterial(itemlist.get(i));
+                int IDinShop = itemlist.get(i);
+                amount = ShopManager.getAmount(IDinShop);
+                price = ShopManager.getPrice(IDinShop);
+                material = ShopManager.getMaterial(IDinShop);
                 shopItem.addItem(ItemBuilder.from(Material.valueOf(material.toUpperCase())).setAmount(amount).setLore("§7" + Main.econ.format(price)).asGuiItem(event -> {
                     String material = event.getCurrentItem().getType().name();
-                    openBuyShop(player, material);
+                    openBuyShop(player, material, IDinShop);
                 }));
             }
             shopItem.open(player);
@@ -111,15 +110,15 @@ public class InventoryManager implements Listener {
     }
 
     public static void selectSearchItem(Player player){
-        PaginatedGui shopItem = new PaginatedGui(3,18, "§b§o§l"+ShopCommands.input.replaceAll("%", ""));
+        PaginatedGui shopItem = new PaginatedGui(4,27, "§b§o§l"+ShopCommands.input.replaceAll("%", ""));
 
         shopItem.getFiller().fillBottom(ItemBuilder.from(Material.valueOf(pl.BottomItem)).setName(" ").asGuiItem());
         shopItem.setDefaultClickAction(event -> {
             event.setCancelled(true);
         });
-        shopItem.setItem(3,3, ItemBuilder.from(Material.valueOf(pl.PreviousPageItem)).setName(pl.PreviousPage).asGuiItem(event -> shopItem.previous()));
-        shopItem.setItem(3,7, ItemBuilder.from(Material.valueOf(pl.NextPageItem)).setName(pl.NextPage).asGuiItem(event -> shopItem.next()));
-        shopItem.setItem(3,1, ItemBuilder.from(Material.valueOf(pl.OneMenuBackItem)).setName(pl.OneMenuBack).asGuiItem(event -> {
+        shopItem.setItem(4,3, ItemBuilder.from(Material.valueOf(pl.PreviousPageItem)).setName(pl.PreviousPage).asGuiItem(event -> shopItem.previous()));
+        shopItem.setItem(4,7, ItemBuilder.from(Material.valueOf(pl.NextPageItem)).setName(pl.NextPage).asGuiItem(event -> shopItem.next()));
+        shopItem.setItem(4,1, ItemBuilder.from(Material.valueOf(pl.OneMenuBackItem)).setName(pl.OneMenuBack).asGuiItem(event -> {
             selectMenu(player);
         }));
         List<Integer> list = ShopManager.getSearchItem(ShopCommands.input);
@@ -132,7 +131,7 @@ public class InventoryManager implements Listener {
                     if (!(IDinShop == 0)){
                         shopItem.addItem(ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7" + Main.econ.format(price)).asGuiItem(event -> {
                             String material = event.getCurrentItem().getType().name();
-                            openBuyShop(player, material);
+                            openBuyShop(player, material, IDinShop);
                         }));
                     }
             }
@@ -148,6 +147,8 @@ public class InventoryManager implements Listener {
     }
 
     public static void openSellShop(Player player) {
+        Gui sellShop = new Gui(6, pl.ItemSellName);
+
         sellShop.getFiller().fillBorder(ItemBuilder.from(Material.valueOf(pl.BorderItem)).setName(" ").asGuiItem(event -> {
             event.setCancelled(true);
         }));
@@ -156,7 +157,7 @@ public class InventoryManager implements Listener {
             openServershop(player);
         }));
         price = 0;
-        sellShop.setItem(6 , 5, ItemBuilder.from(Material.valueOf(pl.SellItem)).setName(pl.SellName.replaceAll("%price%", pl.econ.format(price)+"")).setLore(pl.SellDesc).asGuiItem(event -> {
+        sellShop.setItem(6 , 5, ItemBuilder.from(Material.valueOf(pl.SellItem)).setName(pl.SellName.replaceAll("%price%", Main.econ.format(price)+"")).setLore(pl.SellDesc).asGuiItem(event -> {
             event.setCancelled(true);
         }));
 
@@ -164,7 +165,13 @@ public class InventoryManager implements Listener {
 
 
         sellShop.setOpenGuiAction(event -> {
-            SellManager.runTask();
+            SellManager.task = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), () -> {
+                double totalSale = SellManager.calculateTotalValue(sellShop.getInventory());
+                sellShop.updateItem(6 , 5, ItemBuilder.from(Material.valueOf(Main.getInstance().SellItem)).setName(Main.getInstance().SellName.replaceAll("%price%", Main.econ.format(totalSale)+"")).setLore(Main.getInstance().SellDesc).asGuiItem(event1 -> {
+                    event1.setCancelled(true);
+                    SellManager.sellAll((Player) event1.getWhoClicked(), sellShop.getInventory());
+                }));
+            }, 7, 7);
         });
         sellShop.open(player);
         sellShop.setCloseGuiAction(event -> {
@@ -172,18 +179,10 @@ public class InventoryManager implements Listener {
         });
     }
 
-    public static void returnItem(Player player, ItemStack itemStack) {
-        if (itemStack == null){
-            return;
-        }
-        Map<Integer, ItemStack> overfilled = player.getInventory().addItem(itemStack);
-        if (!overfilled.isEmpty()){
-            overfilled.values().forEach(item2 -> player.getWorld().dropItemNaturally(player.getLocation(), item2));
-        }
-    }
-
-    public static void openBuyShop(Player player, String material) {
+    public static void openBuyShop(Player player, String material, int IDinShop) {
         Gui gui = new Gui(4, pl.ItemBuyName);
+        amount = ShopManager.getAmount(IDinShop);
+        price = ShopManager.getPrice(IDinShop);
         gui.setDefaultClickAction(event -> {
             event.setCancelled(true);
         });
@@ -222,7 +221,15 @@ public class InventoryManager implements Listener {
         gui.open(player);
     }
 
-
+    public static void returnItem(Player player, ItemStack itemStack) {
+        if (itemStack == null){
+            return;
+        }
+        Map<Integer, ItemStack> overfilled = player.getInventory().addItem(itemStack);
+        if (!overfilled.isEmpty()){
+            overfilled.values().forEach(item2 -> player.getWorld().dropItemNaturally(player.getLocation(), item2));
+        }
+    }
 
 
 

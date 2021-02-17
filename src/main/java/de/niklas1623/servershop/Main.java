@@ -111,6 +111,7 @@ public class Main extends JavaPlugin {
     public String SellItem;
     public String SellName;
     public String SellDesc;
+    public String ChangedCategory;
 
 
     public static Main getInstance() {

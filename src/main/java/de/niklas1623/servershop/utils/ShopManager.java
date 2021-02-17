@@ -178,6 +178,20 @@ public class ShopManager {
         }
     }
 
+    public static void updateCategory(int ItemID, String ShopType, int Category){
+        String updatePrice = "UPDATE shop SET Category = ? WHERE ItemID = ? AND ShopType = ?";
+        try {
+            PreparedStatement ps = MySQL.con.prepareStatement(updatePrice);
+            ps.setInt(1, Category);
+            ps.setInt(2, ItemID);
+            ps.setString(3, ShopType);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void updateAmount(int ItemID, String ShopType, int amount){
         String updatePrice = "UPDATE shop SET Amount = ? WHERE ItemID = ? AND ShopType = ?";
         try {
