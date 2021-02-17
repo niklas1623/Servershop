@@ -59,7 +59,7 @@ public class ShopCommands implements CommandExecutor {
                             if (sender.hasPermission("servershop.add") || sender.hasPermission("servershop.*")) {
                                 if (args.length == 4) {
                                     if (args[1].equalsIgnoreCase("s") || args[1].equalsIgnoreCase("b")) {
-                                        if (Integer.valueOf(args[2]) <= list.size() && Integer.valueOf(args[3]) != 0) {
+                                        if (Integer.valueOf(args[2]) <= list.size() && Integer.valueOf(args[2]) > 0) {
                                             if (Double.parseDouble(args[3]) > 0) {
                                                 ShopType = args[1];
                                                 category = Integer.valueOf(args[2]);
@@ -131,7 +131,7 @@ public class ShopCommands implements CommandExecutor {
                                                     } else sender.sendMessage(plugin.WrongAmount);
                                                     return true;
                                                 } else if (args[2].equalsIgnoreCase("category")) {
-                                                    if (Integer.valueOf(args[3]) <= list.size() && Integer.valueOf(args[3]) != 0) {
+                                                    if (Integer.valueOf(args[3]) <= list.size() && Integer.valueOf(args[3]) > 0) {
                                                         ShopType = args[1];
                                                         category =  Integer.valueOf(args[3]);
                                                         ShopManager.updateCategory(ItemID, ShopType, category);
