@@ -17,11 +17,6 @@ import java.util.List;
 
 public class ShopCommands implements CommandExecutor {
 
-    // shop add ShopID Category Price
-    // shop getID
-    // shop edit ShopID Price/Amount
-    // shop remove ShopID
-
     Main plugin = null;
     public static String input;
 
@@ -31,12 +26,6 @@ public class ShopCommands implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-         int ItemID;
-         int amount;
-         double price;
-         String ShopType;
-         int category;
-         String mat;
         if (!(sender instanceof Player)) {
             sender.sendMessage(plugin.OnlyPlayer);
             return true;
@@ -61,14 +50,14 @@ public class ShopCommands implements CommandExecutor {
                                     if (args[1].equalsIgnoreCase("s") || args[1].equalsIgnoreCase("b")) {
                                         if (Integer.valueOf(args[2]) <= list.size() && Integer.valueOf(args[2]) > 0) {
                                             if (Double.parseDouble(args[3]) > 0) {
-                                                ShopType = args[1];
-                                                category = Integer.valueOf(args[2]);
-                                                price = Double.parseDouble(args[3]);
-                                                mat = material.name();
-                                                amount = inv.getItemInMainHand().getAmount();
+                                                String ShopType = args[1];
+                                                int category = Integer.valueOf(args[2]);
+                                                double price = Double.parseDouble(args[3]);
+                                                String mat = material.name();
+                                                int amount = inv.getItemInMainHand().getAmount();
                                                 if (!(material == Material.AIR)) {
                                                     if (!(ShopManager.getItemID(mat) == 0)) {
-                                                        ItemID = ShopManager.getItemID(mat);
+                                                        int ItemID = ShopManager.getItemID(mat);
                                                         if (!(ShopManager.checkItemInShop(ItemID, ShopType) == 1)) {
                                                             ShopManager.addItemToShop(ItemID, amount, price, ShopType, category);
                                                             sender.sendMessage(plugin.AddItem.replaceAll("%amount%", amount + "").replaceAll("%price%", plugin.econ.format(price) + "").replaceAll("%item%", mat.toLowerCase()));
@@ -76,7 +65,7 @@ public class ShopCommands implements CommandExecutor {
                                                         return true;
                                                     } else {
                                                         ShopManager.insertItem(mat);
-                                                        ItemID = ShopManager.getItemID(mat);
+                                                        int ItemID = ShopManager.getItemID(mat);
                                                         if (!(ShopManager.checkItemInShop(ItemID, ShopType) == 1)) {
                                                             ShopManager.addItemToShop(ItemID, amount, price, ShopType, category);
                                                             sender.sendMessage(plugin.AddItem.replaceAll("%amount%", amount + "").replaceAll("%price%", plugin.econ.format(price) + "").replaceAll("%item%", mat.toLowerCase()));
@@ -109,15 +98,15 @@ public class ShopCommands implements CommandExecutor {
                                 if (args.length == 4) {
                                     material = inv.getItemInMainHand().getType();
                                 if (!(material == Material.AIR)) {
-                                    mat = material.name();
-                                    ItemID = ShopManager.getItemID(mat);
+                                    String mat = material.name();
+                                    int ItemID = ShopManager.getItemID(mat);
                                     if (args[1].equalsIgnoreCase("s") || args[1].equalsIgnoreCase("b")) {
-                                        ShopType = args[1];
+                                        String ShopType = args[1];
                                         if (!(ShopManager.getItemID(mat) == 0)){
                                             if (ShopManager.checkItemInShop(ItemID, ShopType) == 1) {
                                                 if (args[2].equalsIgnoreCase("price")) {
                                                     if (Double.parseDouble(args[3]) > 0) {
-                                                        price = Double.parseDouble(args[3]);
+                                                        double price = Double.parseDouble(args[3]);
                                                         ShopManager.updatePrice(ItemID, ShopType, price);
                                                         sender.sendMessage(plugin.ChangedPrice.replaceAll("%price%", plugin.econ.format(price) + "").replaceAll("%item%", mat.toLowerCase()));
                                                     } else sender.sendMessage(plugin.PriceNull);
@@ -125,7 +114,7 @@ public class ShopCommands implements CommandExecutor {
                                                 } else if (args[2].equalsIgnoreCase("amount")) {
                                                     if (Integer.valueOf(args[3]) > 0) {
                                                         ShopType = args[1];
-                                                        amount = Integer.valueOf(args[3]);
+                                                        int amount = Integer.valueOf(args[3]);
                                                         ShopManager.updateAmount(ItemID, ShopType, amount);
                                                         sender.sendMessage(plugin.ChangedAmount.replaceAll("%amount%", amount + "").replaceAll("%item%", mat.toLowerCase()));
                                                     } else sender.sendMessage(plugin.WrongAmount);
@@ -133,7 +122,7 @@ public class ShopCommands implements CommandExecutor {
                                                 } else if (args[2].equalsIgnoreCase("category")) {
                                                     if (Integer.valueOf(args[3]) <= list.size() && Integer.valueOf(args[3]) > 0) {
                                                         ShopType = args[1];
-                                                        category =  Integer.valueOf(args[3]);
+                                                        int category =  Integer.valueOf(args[3]);
                                                         ShopManager.updateCategory(ItemID, ShopType, category);
                                                         sender.sendMessage(plugin.ChangedCategory.replaceAll("%category%", String.valueOf(category)));
                                                     } else {
@@ -166,9 +155,9 @@ public class ShopCommands implements CommandExecutor {
                                 if (args.length == 2){
                                     material = inv.getItemInMainHand().getType();
                                     if (args[1].equalsIgnoreCase("s") || args[1].equalsIgnoreCase("b")){
-                                        mat = material.name();
-                                        ItemID = ShopManager.getItemID(mat);
-                                        ShopType = args[1];
+                                       String mat = material.name();
+                                        int ItemID = ShopManager.getItemID(mat);
+                                        String ShopType = args[1];
                                         if (!(material == Material.AIR)){
                                             if (!(ItemID == 0)){
                                                 if (ShopManager.checkItemInShop(ItemID, ShopType) == 1) {
@@ -194,8 +183,8 @@ public class ShopCommands implements CommandExecutor {
                             if (sender.hasPermission("servershop.getid") || sender.hasPermission("servershop.*")) {
                                 if (args.length == 1) {
                                     material = inv.getItemInMainHand().getType();
-                                    mat = material.name();
-                                    ItemID = ShopManager.getItemID(mat);
+                                    String mat = material.name();
+                                    int ItemID = ShopManager.getItemID(mat);
                                     if (!(material == Material.AIR)) {
                                         sender.sendMessage(plugin.IDforItem.replaceAll("%item%", mat.toLowerCase()).replaceAll("%id%", ItemID + ""));
                                     } else sender.sendMessage(plugin.NoAIR);
