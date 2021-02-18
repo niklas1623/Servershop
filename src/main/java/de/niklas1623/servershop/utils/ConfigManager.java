@@ -44,6 +44,11 @@ public class ConfigManager {
     }
 
     public static FileConfiguration getMessageFileConfiguration() {
+        try {
+            MsgConfig.load(customConfigFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
         return MsgConfig;
     }
 
