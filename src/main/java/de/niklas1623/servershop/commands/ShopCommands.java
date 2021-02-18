@@ -37,6 +37,13 @@ public class ShopCommands implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+         int ItemID;
+         int amount;
+         double price;
+         String ShopType;
+         int category;
+         String mat;
+         String input;
         if (!(sender instanceof Player)) {
             sender.sendMessage(plugin.OnlyPlayer);
             return true;
