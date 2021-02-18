@@ -83,8 +83,7 @@ public class InventoryManager implements Listener {
         shopItem.setDefaultClickAction(event -> {
             event.setCancelled(true);
         });
-        shopItem.setItem(4,3, ItemBuilder.from(Material.valueOf(pl.PreviousPageItem)).setName(pl.PreviousPage).asGuiItem(event -> shopItem.previous()));
-        shopItem.setItem(4,7, ItemBuilder.from(Material.valueOf(pl.NextPageItem)).setName(pl.NextPage).asGuiItem(event -> shopItem.next()));
+
         shopItem.setItem(4,1, ItemBuilder.from(Material.valueOf(pl.OneMenuBackItem)).setName(pl.OneMenuBack).asGuiItem(event -> {
             selectMenu(player);
         }));
@@ -99,8 +98,15 @@ public class InventoryManager implements Listener {
                     String material = event.getCurrentItem().getType().name();
                     openBuyShop(player, material, IDinShop);
                 }));
+
+
             }
             shopItem.open(player);
+            if (shopItem.getNextPageNum() > 1){
+                shopItem.setItem(4,3, ItemBuilder.from(Material.valueOf(pl.PreviousPageItem)).setName(pl.PreviousPage).asGuiItem(event -> shopItem.previous()));
+                shopItem.setItem(4,7, ItemBuilder.from(Material.valueOf(pl.NextPageItem)).setName(pl.NextPage).asGuiItem(event -> shopItem.next()));
+            }
+            shopItem.update();
 
         } else {
             player.closeInventory();
