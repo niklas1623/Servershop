@@ -22,17 +22,11 @@ public class ShopCommands implements CommandExecutor {
     // shop edit ShopID Price/Amount
     // shop remove ShopID
 
-    Main plugin = Main.getInstance();
-    public int ItemID;
-    public int amount;
-    public double price;
-    public String ShopType;
-    public int category;
-    public String mat;
+    Main plugin = null;
     public static String input;
 
-
     public ShopCommands(Main main) {
+        plugin = main;
     }
 
     @Override
@@ -43,7 +37,6 @@ public class ShopCommands implements CommandExecutor {
          String ShopType;
          int category;
          String mat;
-         String input;
         if (!(sender instanceof Player)) {
             sender.sendMessage(plugin.OnlyPlayer);
             return true;
