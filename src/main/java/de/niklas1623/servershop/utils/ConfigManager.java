@@ -2,6 +2,7 @@ package de.niklas1623.servershop.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -78,6 +79,21 @@ public class ConfigManager {
         pl.SellDesc = ChatColor.translateAlternateColorCodes('&', cfg.getString("Settings.Items.Sell.Desc"));
         pl.SellItem = cfg.getString("Settings.Items.Sell.Item");
         pl.SellName = ChatColor.translateAlternateColorCodes('&', cfg.getString("Settings.Items.Sell.Name"));
+        pl.SearchItem = cfg.getString("Settings.Items.Search.Item");
+        pl.SearchName = ChatColor.translateAlternateColorCodes('&', cfg.getString("Settings.Items.Search.Name"));
+        pl.SearchDesc = ChatColor.translateAlternateColorCodes('&', cfg.getString("Settings.Items.Search.Desc"));
+        pl.PlusItem = cfg.getString("Settings.Items.Plus.Item");
+        pl.PlusHeadID = cfg.getString("Settings.Items.Plus.HeadID");
+        pl.PlusName = ChatColor.translateAlternateColorCodes('&', cfg.getString("Settings.Items.Plus.Name"));
+        for (String lore : cfg.getStringList("Settings.Items.Plus.Desc")) {
+            pl.PlusDesc.add(ChatColor.translateAlternateColorCodes('&', lore));
+        }
+        pl.MinusItem = cfg.getString("Settings.Items.Minus.Item");
+        pl.MinusHeadID = cfg.getString("Settings.Items.Minus.HeadID");
+        pl.MinusName = ChatColor.translateAlternateColorCodes('&', cfg.getString("Settings.Items.Minus.Name"));
+        for (String lore : cfg.getStringList("Settings.Items.Minus.Desc")) {
+            pl.MinusDesc.add(ChatColor.translateAlternateColorCodes('&', lore));
+        }
 
         MySQL.username = cfg.getString("Database.username");
         MySQL.password = cfg.getString("Database.password");
@@ -119,6 +135,8 @@ public class ConfigManager {
         pl.HowToSearch = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("HowToSearch").replaceAll("%prefix%", pl.prefix));
         pl.NotFound = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("NotFound").replaceAll("%prefix%", pl.prefix));
         pl.ChangedCategory = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("ChangedCategory").replaceAll("%prefix%", pl.prefix));
+        pl.SearchText = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("SearchText").replaceAll("%prefix%", pl.prefix));
+
     }
 
 }

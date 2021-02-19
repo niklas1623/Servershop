@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import de.niklas1623.servershop.Main;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -17,15 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 public class InventoryManager implements Listener {
-    public static Main pl = Main.getInstance();
-    public static String material;
-    public static double price;
-    public static int amount;
+    private static Main pl = Main.getInstance();
     public static int Category;
 
     public static Gui menuItem = new Gui(6,  Main.getInstance().ServershopName);
-    //public static Gui sellShop;
-
 
     public static void openServershop(Player player) {
         Gui gui = new Gui(3, Main.getInstance().ServershopName);
@@ -53,9 +47,9 @@ public class InventoryManager implements Listener {
         GuiItem pluginInfo = ItemBuilder.from(Material.COMMAND_BLOCK).setName("§a§l"+Main.getInstance().getDescription().getName()).setLore(info).asGuiItem();
 
         gui.setItem(4, pluginInfo);
-        gui.setItem(22, money);
         gui.setItem(11, buy);
         gui.setItem(15, sell);
+        gui.setItem(22, money);
         gui.open(player);
     }
 
@@ -71,8 +65,13 @@ public class InventoryManager implements Listener {
         GuiItem back = ItemBuilder.from(Material.valueOf(pl.OneMenuBackItem)).setName(pl.OneMenuBack).asGuiItem(event -> {
             openServershop(player);
         });
+        GuiItem search = ItemBuilder.from(Material.valueOf(pl.SearchItem)).setName(pl.SearchName).setLore(pl.SearchDesc).asGuiItem(event -> {
+            player.closeInventory();
+            player.sendMessage(pl.ComingSoon);
+        });
         menuItem.setItem(45,back);
         menuItem.setItem(49,money);
+        menuItem.setItem(53, search);
         menuItem.open(player);
     }
 
@@ -91,12 +90,12 @@ public class InventoryManager implements Listener {
         if (!(itemlist.size() == 0)) {
             for (int i = 0; i < itemlist.size(); i++) {
                 int IDinShop = itemlist.get(i);
-                amount = ShopManager.getAmount(IDinShop);
-                price = ShopManager.getPrice(IDinShop);
-                material = ShopManager.getMaterial(IDinShop);
+                int amount = ShopManager.getAmount(IDinShop);
+                double price = ShopManager.getPrice(IDinShop);
+                String material = ShopManager.getMaterial(IDinShop);
                 shopItem.addItem(ItemBuilder.from(Material.valueOf(material.toUpperCase())).setAmount(amount).setLore("§7" + Main.econ.format(price)).asGuiItem(event -> {
-                    String material = event.getCurrentItem().getType().name();
-                    openBuyShop(player, material, IDinShop);
+                    String mat = event.getCurrentItem().getType().name();
+                    openBuyShop(player, mat, IDinShop);
                 }));
 
 
@@ -131,13 +130,13 @@ public class InventoryManager implements Listener {
         if (!(list.size() == 0)) {
             for (int i = 0; i < list.size(); i++) {
                 int IDinShop = ShopManager.getIDinShop("b",list.get(i));
-                    amount = ShopManager.getAmount(IDinShop);
-                    price = ShopManager.getPrice(IDinShop);
-                    material = ShopManager.getMaterial(IDinShop);
+                    int amount = ShopManager.getAmount(IDinShop);
+                    double price = ShopManager.getPrice(IDinShop);
+                    String material = ShopManager.getMaterial(IDinShop);
                     if (!(IDinShop == 0)){
                         shopItem.addItem(ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7" + Main.econ.format(price)).asGuiItem(event -> {
-                            String material = event.getCurrentItem().getType().name();
-                            openBuyShop(player, material, IDinShop);
+                            String mat = event.getCurrentItem().getType().name();
+                            openBuyShop(player, mat, IDinShop);
                         }));
                     }
             }
@@ -162,7 +161,7 @@ public class InventoryManager implements Listener {
             event.setCancelled(true);
             openServershop(player);
         }));
-        price = 0;
+        double price = 0;
         sellShop.setItem(6 , 5, ItemBuilder.from(Material.valueOf(pl.SellItem)).setName(pl.SellName.replaceAll("%price%", Main.econ.format(price)+"")).setLore(pl.SellDesc).asGuiItem(event -> {
             event.setCancelled(true);
         }));
@@ -187,8 +186,10 @@ public class InventoryManager implements Listener {
 
     public static void openBuyShop(Player player, String material, int IDinShop) {
         Gui gui = new Gui(4, pl.ItemBuyName);
-        amount = ShopManager.getAmount(IDinShop);
-        price = ShopManager.getPrice(IDinShop);
+        int amount = ShopManager.getAmount(IDinShop);
+        double price = ShopManager.getPrice(IDinShop);
+        double price_per_one = price / amount;
+
         gui.setDefaultClickAction(event -> {
             event.setCancelled(true);
         });
@@ -198,9 +199,9 @@ public class InventoryManager implements Listener {
         }));
         gui.setItem(4,5 , ItemBuilder.from(Material.valueOf(pl.CurrentMoneyItem)).setName(pl.CurrentMoney).setLore("§e"+Main.econ.format(Main.econ.getBalance(player))).asGuiItem());
 
-        gui.setItem(2, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7"+pl.econ.format(price)).asGuiItem());
+        gui.setItem(3, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7"+pl.econ.format(price)).asGuiItem());
 
-        gui.setItem(2, 3, ItemBuilder.from(Material.valueOf(pl.AcceptItem)).setName(pl.AcceptName).asGuiItem(event -> {
+        gui.setItem(3, 3, ItemBuilder.from(Material.valueOf(pl.AcceptItem)).setName(pl.AcceptName).asGuiItem(event -> {
 
             if (pl.econ.getBalance(player) >= price) {
                 if (!(player.getInventory().firstEmpty() == -1)){
@@ -217,9 +218,60 @@ public class InventoryManager implements Listener {
                 player.sendMessage(pl.NoMoney);
             }
         }));
-        gui.setItem(2, 7, ItemBuilder.from(Material.valueOf(pl.DenyItem)).setName(pl.DenyName).asGuiItem(event -> {
+        gui.setItem(3, 7, ItemBuilder.from(Material.valueOf(pl.DenyItem)).setName(pl.DenyName).asGuiItem(event -> {
             selectMenu(player);
         }));
+        if (pl.MinusItem.equalsIgnoreCase(Material.PLAYER_HEAD.name())) {
+            gui.setItem(2, 7, ItemBuilder.from(Material.valueOf(pl.MinusItem)).setSkullTexture(pl.MinusHeadID).setName(pl.MinusName).setLore(pl.MinusDesc).asGuiItem(event -> {
+                if (event.isLeftClick()) {
+                    amount -= 1;
+                } else if (event.isRightClick()) {
+                    amount -= 10;
+                }
+                if (amount < 1) {
+                    amount = 1;
+                }
+                gui.updateItem(3, 5, ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7" + pl.econ.format(price)).asGuiItem());
+            }));
+        } else {
+            gui.setItem(2, 7, ItemBuilder.from(Material.valueOf(pl.MinusItem)).setName(pl.MinusName).setLore("").asGuiItem(event -> {
+                if (event.isLeftClick()) {
+                    amount -= 1;
+                } else if (event.isRightClick()) {
+                    amount -= 10;
+                }
+                if (amount < 1) {
+                    amount = 1;
+                }
+                gui.updateItem(3, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7"+pl.econ.format(price)).asGuiItem());
+            }));
+        }
+
+        if (pl.PlusItem.equalsIgnoreCase(Material.PLAYER_HEAD.name())) {
+            gui.setItem(2, 3, ItemBuilder.from(Material.valueOf(pl.PlusItem)).setSkullTexture(pl.PlusHeadID).setName(pl.PlusName).setLore(pl.PlusDesc).asGuiItem(event -> {
+                if (event.isLeftClick()) {
+                    amount += 1;
+                } else if (event.isRightClick()) {
+                    amount += 10;
+                }
+                if (amount > 64) {
+                    amount = 64;
+                }
+                gui.updateItem(3, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7"+pl.econ.format(price)).asGuiItem());
+            }));
+        } else {
+            gui.setItem(2, 3, ItemBuilder.from(Material.valueOf(pl.PlusItem)).setName(pl.PlusName).setLore("").asGuiItem(event -> {
+                if (event.isLeftClick()) {
+                    amount += 1;
+                } else if (event.isRightClick()) {
+                    amount += 10;
+                }
+                if (amount > 64) {
+                    amount = 64;
+                }
+                gui.updateItem(3, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7"+pl.econ.format(price)).asGuiItem());
+            }));
+        }
 
 
 

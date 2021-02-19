@@ -37,4 +37,6 @@ Reload: "%prefix% &7Die Config wurde neu geladen!"
 NotAvailable: "%prefix% &7Der Shop ist derzeit &cnicht &7verfügbar!"
 HowToSearch: "%prefix% &7Nutze /shop search <input>"
 NotFound: "%prefix% &7Zu deiner Suche: &e&o%input%&7, konnte &cnichts &7gefunden werden!"
-ChangedCategory: "%prefix% &7Du hast die Category in &e&o%category% &7geändert."
+ChangedCategory: "%prefix% &7Du hast die Kategorie in &e&o%category% &7geändert."
+SearchText: "&e&l&oHier klicken &7um nach einem Item zu suchen."
+

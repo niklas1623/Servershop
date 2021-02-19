@@ -131,9 +131,9 @@ public class ShopManager {
     }
 
     public static int getAmount(int IDinShop){
-        String getPrice = "SELECT Amount FROM shop WHERE IDinShop = ?";
+        String getAmount = "SELECT Amount FROM shop WHERE IDinShop = ?";
         try {
-            PreparedStatement ps = MySQL.con.prepareStatement(getPrice);
+            PreparedStatement ps = MySQL.con.prepareStatement(getAmount);
             ps.setInt(1, IDinShop);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){

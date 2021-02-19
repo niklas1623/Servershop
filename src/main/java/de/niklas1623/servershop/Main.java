@@ -14,9 +14,13 @@ import de.niklas1623.servershop.database.MySQL;
 import net.milkbowl.vault.economy.Economy;
 import de.niklas1623.servershop.utils.ConfigManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main extends JavaPlugin {
 
     public static Economy econ;
+
 
 
     @Override
@@ -112,6 +116,18 @@ public class Main extends JavaPlugin {
     public String SellName;
     public String SellDesc;
     public String ChangedCategory;
+    public String SearchItem;
+    public String SearchName;
+    public String SearchDesc;
+    public String PlusItem;
+    public String PlusHeadID;
+    public String PlusName;
+    public List<String> PlusDesc = new ArrayList<>();
+    public String MinusItem;
+    public String MinusHeadID;
+    public String MinusName;
+    public List<String> MinusDesc = new ArrayList<>();
+    public String SearchText;
 
 
     public static Main getInstance() {
