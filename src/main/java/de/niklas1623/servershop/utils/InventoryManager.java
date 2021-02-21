@@ -3,6 +3,10 @@ package de.niklas1623.servershop.utils;
 import de.niklas1623.servershop.commands.ShopCommands;
 import me.mattstudios.mfgui.gui.components.ItemBuilder;
 import me.mattstudios.mfgui.gui.guis.*;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,7 +26,7 @@ public class InventoryManager implements Listener {
     public static Gui menuItem = new Gui(6,  Main.getInstance().ServershopName);
 
     public static void openServershop(Player player) {
-        Gui gui = new Gui(3, Main.getInstance().ServershopName);
+        Gui gui = new Gui(3, pl.ServershopName);
         gui.setDefaultClickAction(event -> {
             event.setCancelled(true);
         });
@@ -32,19 +36,15 @@ public class InventoryManager implements Listener {
             selectMenu(player);
         });
         GuiItem sell = ItemBuilder.from(Material.CHEST).setName(pl.ItemSellName).setLore(pl.ItemSellDesc).asGuiItem(event -> {
-            //event.setCancelled(true);
-            //player.closeInventory();
-            //player.sendMessage(Main.getInstance().ComingSoon.replaceAll("%prefix%", Main.getInstance().prefix));
             openSellShop(player);
         });
 
         GuiItem money = ItemBuilder.from(Material.valueOf(pl.CurrentMoneyItem)).setName(pl.CurrentMoney).setLore("§e"+Main.econ.format(Main.econ.getBalance(player))).asGuiItem();
         ArrayList<String> info = new ArrayList<>();
-        info.add("");
-        info.add("§7Made by:§o niklas1623");
-        info.add("§7Version: §o"+Main.getInstance().getDescription().getVersion());
+        info.add("§8Made by:§7§o niklas1623");
+        info.add("§8Version: §7§o"+pl.getDescription().getVersion());
 
-        GuiItem pluginInfo = ItemBuilder.from(Material.COMMAND_BLOCK).setName("§a§l"+Main.getInstance().getDescription().getName()).setLore(info).asGuiItem();
+        GuiItem pluginInfo = ItemBuilder.from(Material.COMMAND_BLOCK).setName("§a§l"+pl.getDescription().getName()).setLore(info).asGuiItem();
 
         gui.setItem(4, pluginInfo);
         gui.setItem(11, buy);
@@ -66,8 +66,12 @@ public class InventoryManager implements Listener {
             openServershop(player);
         });
         GuiItem search = ItemBuilder.from(Material.valueOf(pl.SearchItem)).setName(pl.SearchName).setLore(pl.SearchDesc).asGuiItem(event -> {
-            player.closeInventory();
-            player.sendMessage(pl.ComingSoon);
+            Player p = (Player) event.getWhoClicked();
+            p.closeInventory();
+            TextComponent message = new TextComponent(pl.SearchText);
+            message.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/shop search "));
+            message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(pl.SearchDesc)));
+            p.spigot().sendMessage(message);
         });
         menuItem.setItem(45,back);
         menuItem.setItem(49,money);
@@ -121,8 +125,6 @@ public class InventoryManager implements Listener {
         shopItem.setDefaultClickAction(event -> {
             event.setCancelled(true);
         });
-        shopItem.setItem(4,3, ItemBuilder.from(Material.valueOf(pl.PreviousPageItem)).setName(pl.PreviousPage).asGuiItem(event -> shopItem.previous()));
-        shopItem.setItem(4,7, ItemBuilder.from(Material.valueOf(pl.NextPageItem)).setName(pl.NextPage).asGuiItem(event -> shopItem.next()));
         shopItem.setItem(4,1, ItemBuilder.from(Material.valueOf(pl.OneMenuBackItem)).setName(pl.OneMenuBack).asGuiItem(event -> {
             selectMenu(player);
         }));
@@ -145,6 +147,11 @@ public class InventoryManager implements Listener {
                 player.closeInventory();
                 player.sendMessage(pl.NotFound.replaceAll("%input%", ShopCommands.input.replaceAll("%", "")));
             }
+            if (shopItem.getNextPageNum() > 1){
+                shopItem.setItem(4,3, ItemBuilder.from(Material.valueOf(pl.PreviousPageItem)).setName(pl.PreviousPage).asGuiItem(event -> shopItem.previous()));
+                shopItem.setItem(4,7, ItemBuilder.from(Material.valueOf(pl.NextPageItem)).setName(pl.NextPage).asGuiItem(event -> shopItem.next()));
+            }
+            shopItem.update();
         } else {
             player.sendMessage(pl.NotFound.replaceAll("%input%", ShopCommands.input.replaceAll("%", "")));
         }
@@ -186,9 +193,9 @@ public class InventoryManager implements Listener {
 
     public static void openBuyShop(Player player, String material, int IDinShop) {
         Gui gui = new Gui(4, pl.ItemBuyName);
-        int amount = ShopManager.getAmount(IDinShop);
-        double price = ShopManager.getPrice(IDinShop);
-        double price_per_one = price / amount;
+        final int[] amount = {ShopManager.getAmount(IDinShop)};
+        final double[] price = {ShopManager.getPrice(IDinShop)};
+        double price_per_one = price[0] / amount[0];
 
         gui.setDefaultClickAction(event -> {
             event.setCancelled(true);
@@ -199,15 +206,15 @@ public class InventoryManager implements Listener {
         }));
         gui.setItem(4,5 , ItemBuilder.from(Material.valueOf(pl.CurrentMoneyItem)).setName(pl.CurrentMoney).setLore("§e"+Main.econ.format(Main.econ.getBalance(player))).asGuiItem());
 
-        gui.setItem(3, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7"+pl.econ.format(price)).asGuiItem());
+        gui.setItem(1, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount[0]).setLore("§7"+pl.econ.format(price[0])).asGuiItem());
 
-        gui.setItem(3, 3, ItemBuilder.from(Material.valueOf(pl.AcceptItem)).setName(pl.AcceptName).asGuiItem(event -> {
+        gui.setItem(2, 3, ItemBuilder.from(Material.valueOf(pl.AcceptItem)).setName(pl.AcceptName).asGuiItem(event -> {
 
-            if (pl.econ.getBalance(player) >= price) {
+            if (pl.econ.getBalance(player) >= price[0]) {
                 if (!(player.getInventory().firstEmpty() == -1)){
-                    player.getInventory().addItem(new ItemStack(Material.valueOf(material), amount));
-                    pl.econ.withdrawPlayer(player, price);
-                    player.sendMessage(pl.ItemBuy.replaceAll("%amount%", amount+"").replaceAll("%item%", material.toLowerCase()).replaceAll("%price%", pl.econ.format(price)));
+                    player.getInventory().addItem(new ItemStack(Material.valueOf(material), amount[0]));
+                    pl.econ.withdrawPlayer(player, price[0]);
+                    player.sendMessage(pl.ItemBuy.replaceAll("%amount%", amount[0] +"").replaceAll("%item%", material.toLowerCase()).replaceAll("%price%", pl.econ.format(price[0])));
                     gui.updateItem(4,5 , ItemBuilder.from(Material.valueOf(pl.CurrentMoneyItem)).setName(pl.CurrentMoney).setLore("§e"+Main.econ.format(Main.econ.getBalance(player))).asGuiItem());
                 } else {
                     player.closeInventory();
@@ -218,64 +225,72 @@ public class InventoryManager implements Listener {
                 player.sendMessage(pl.NoMoney);
             }
         }));
-        gui.setItem(3, 7, ItemBuilder.from(Material.valueOf(pl.DenyItem)).setName(pl.DenyName).asGuiItem(event -> {
+        gui.setItem(2, 7, ItemBuilder.from(Material.valueOf(pl.DenyItem)).setName(pl.DenyName).asGuiItem(event -> {
             selectMenu(player);
         }));
         if (pl.MinusItem.equalsIgnoreCase(Material.PLAYER_HEAD.name())) {
-            gui.setItem(2, 7, ItemBuilder.from(Material.valueOf(pl.MinusItem)).setSkullTexture(pl.MinusHeadID).setName(pl.MinusName).setLore(pl.MinusDesc).asGuiItem(event -> {
+            gui.setItem(3, 6, ItemBuilder.from(Material.valueOf(pl.MinusItem)).setSkullTexture(pl.MinusHeadID).setName(pl.MinusName).setLore(pl.MinusDesc).asGuiItem(event -> {
                 if (event.isLeftClick()) {
-                    amount -= 1;
+                    amount[0] -= 1;
                 } else if (event.isRightClick()) {
-                    amount -= 10;
+                    amount[0] -= 10;
+                } else {
+                    event.setCancelled(true);
                 }
-                if (amount < 1) {
-                    amount = 1;
+                if (amount[0] < 1) {
+                    amount[0] = 1;
                 }
-                gui.updateItem(3, 5, ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7" + pl.econ.format(price)).asGuiItem());
+                price[0] = price_per_one * amount[0];
+                gui.updateItem(1, 5, ItemBuilder.from(Material.valueOf(material)).setAmount(amount[0]).setLore("§7" + pl.econ.format(price[0])).asGuiItem());
             }));
         } else {
-            gui.setItem(2, 7, ItemBuilder.from(Material.valueOf(pl.MinusItem)).setName(pl.MinusName).setLore("").asGuiItem(event -> {
+            gui.setItem(3, 6, ItemBuilder.from(Material.valueOf(pl.MinusItem)).setName(pl.MinusName).setLore("").asGuiItem(event -> {
                 if (event.isLeftClick()) {
-                    amount -= 1;
+                    amount[0] -= 1;
                 } else if (event.isRightClick()) {
-                    amount -= 10;
+                    amount[0] -= 10;
+                } else {
+                    event.setCancelled(true);
                 }
-                if (amount < 1) {
-                    amount = 1;
+                if (amount[0] < 1) {
+                    amount[0] = 1;
                 }
-                gui.updateItem(3, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7"+pl.econ.format(price)).asGuiItem());
+                price[0] = price_per_one * amount[0];
+                gui.updateItem(1, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount[0]).setLore("§7"+pl.econ.format(price[0])).asGuiItem());
             }));
         }
 
         if (pl.PlusItem.equalsIgnoreCase(Material.PLAYER_HEAD.name())) {
-            gui.setItem(2, 3, ItemBuilder.from(Material.valueOf(pl.PlusItem)).setSkullTexture(pl.PlusHeadID).setName(pl.PlusName).setLore(pl.PlusDesc).asGuiItem(event -> {
+            gui.setItem(3, 4, ItemBuilder.from(Material.valueOf(pl.PlusItem)).setSkullTexture(pl.PlusHeadID).setName(pl.PlusName).setLore(pl.PlusDesc).asGuiItem(event -> {
                 if (event.isLeftClick()) {
-                    amount += 1;
+                    amount[0] += 1;
                 } else if (event.isRightClick()) {
-                    amount += 10;
+                    amount[0] += 10;
+                } else {
+                    event.setCancelled(true);
                 }
-                if (amount > 64) {
-                    amount = 64;
+                if (amount[0] > 64) {
+                    amount[0] = 64;
                 }
-                gui.updateItem(3, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7"+pl.econ.format(price)).asGuiItem());
+                price[0] = price_per_one * amount[0];
+                gui.updateItem(1, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount[0]).setLore("§7"+pl.econ.format(price[0])).asGuiItem());
             }));
         } else {
-            gui.setItem(2, 3, ItemBuilder.from(Material.valueOf(pl.PlusItem)).setName(pl.PlusName).setLore("").asGuiItem(event -> {
+            gui.setItem(3, 4, ItemBuilder.from(Material.valueOf(pl.PlusItem)).setName(pl.PlusName).setLore("").asGuiItem(event -> {
                 if (event.isLeftClick()) {
-                    amount += 1;
+                    amount[0] += 1;
                 } else if (event.isRightClick()) {
-                    amount += 10;
+                    amount[0] += 10;
+                } else {
+                    event.setCancelled(true);
                 }
-                if (amount > 64) {
-                    amount = 64;
+                if (amount[0] > 64) {
+                    amount[0] = 64;
                 }
-                gui.updateItem(3, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7"+pl.econ.format(price)).asGuiItem());
+                price[0] = price_per_one * amount[0];
+                gui.updateItem(1, 5 , ItemBuilder.from(Material.valueOf(material)).setAmount(amount[0]).setLore("§7"+Main.econ.format(price[0])).asGuiItem());
             }));
         }
-
-
-
-
         gui.open(player);
     }
 
