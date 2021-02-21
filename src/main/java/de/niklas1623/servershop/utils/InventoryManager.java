@@ -68,7 +68,7 @@ public class InventoryManager implements Listener {
         GuiItem search = ItemBuilder.from(Material.valueOf(pl.SearchItem)).setName(pl.SearchName).setLore(pl.SearchDesc).asGuiItem(event -> {
             Player p = (Player) event.getWhoClicked();
             p.closeInventory();
-            TextComponent message = new TextComponent(pl.SearchText);
+            TextComponent message = new TextComponent(pl.prefix+ " "+pl.SearchText);
             message.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/shop search "));
             message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(pl.SearchDesc)));
             p.spigot().sendMessage(message);

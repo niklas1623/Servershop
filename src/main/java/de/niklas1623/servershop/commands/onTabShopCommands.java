@@ -16,21 +16,35 @@ public class onTabShopCommands implements TabCompleter {
         HashMap<Integer, String> category = MenuManager.getCategory();
 
         List<String> list = new ArrayList<>();
-        list.add("add");
-        list.add("remove");
-        list.add("edit");
-        list.add("reload");
-        list.add("getid");
-        list.add("help");
-        list.add("search");
         List<String> list2 = new ArrayList<>();
-        list2.add("b");
-        list2.add("s");
         List<String> list3 = new ArrayList<>();
         List<String> list4 = new ArrayList<>();
-        list4.add("price");
-        list4.add("amount");
-        list4.add("category");
+
+
+        if (sender.hasPermission("servershop.use") || sender.hasPermission("servershop.*")){
+            list.add("help");
+            list.add("search");
+        }
+        if (sender.hasPermission("servershop.edit") || sender.hasPermission("servershop.*")){
+            list.add("edit");
+            list2.add("b");
+            list2.add("s");
+            list4.add("price");
+            list4.add("amount");
+            list4.add("category");
+        }
+        if (sender.hasPermission("servershop.add") || sender.hasPermission("servershop.*")){
+            list.add("add");
+        }
+        if (sender.hasPermission("servershop.remove") || sender.hasPermission("servershop.*")){
+            list.add("remove");
+        }
+        if (sender.hasPermission("servershop.reload") || sender.hasPermission("servershop.*")){
+            list.add("reload");
+        }
+        if (sender.hasPermission("servershop.getid") || sender.hasPermission("servershop.*")){
+            list.add("getid");
+        }
 
         if (cmd.getName().equalsIgnoreCase("shop")){
             if (args.length == 1){
@@ -49,6 +63,10 @@ public class onTabShopCommands implements TabCompleter {
                     return list2;
                 } else if (args.length == 3){
                     return list4;
+                }
+            } else if (args[0].equalsIgnoreCase("remove")){
+                if (args.length == 2){
+                    return list2;
                 }
             }
         }
