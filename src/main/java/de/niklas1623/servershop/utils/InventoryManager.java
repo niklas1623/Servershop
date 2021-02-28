@@ -24,7 +24,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 public class InventoryManager implements Listener {
-    private static Main pl = Main.getInstance();
+    private static final Main pl = Main.getInstance();
     public static int Category;
 
     public static Gui menuItem = new Gui(6,  Main.getInstance().ServershopName);
@@ -217,18 +217,10 @@ public class InventoryManager implements Listener {
             if (Main.econ.getBalance(player) >= price[0]) {
                 if (!(player.getInventory().firstEmpty() == -1)){
                     player.getInventory().addItem(new ItemStack(Material.valueOf(material), amount[0]));
-
-                    if (Main.econ.hasAccount(pl.AccountName)){
-                        player.sendMessage("JA ES GEHT!"+getUUID(pl.AccountName));
-
-                    } else {
-                        player.sendMessage("NEIN ES GEHT NICHT");
-                    }
                     if (pl.ServerAccount){
                         if (pl.AccountName != null){
                             Main.econ.withdrawPlayer(player, price[0]);
                             addMoneyToServer(price[0]);
-                            player.sendMessage(offlinePlayer().getName());
                         } else {
                             player.sendMessage(pl.NoServerShopAccount);
                             Main.econ.withdrawPlayer(player, price[0]);
