@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import de.niklas1623.servershop.Main;
 import de.niklas1623.servershop.database.MySQL;
+import org.bukkit.entity.Player;
 
 public class ConfigManager {
 
@@ -55,6 +56,8 @@ public class ConfigManager {
 
     public static void readConfig() {
         cfg = getConfigFileConfiguration();
+        pl.ServerAccount = cfg.getBoolean("Settings.Servershop.ServerAccount");
+        pl.AccountName = cfg.getString("Settings.Servershop.AccountName");
         pl.prefix = ChatColor.translateAlternateColorCodes('&', cfg.getString("Prefix") + "§r");
         pl.ServershopName = ChatColor.translateAlternateColorCodes('&', cfg.getString("Settings.Servershop.Name"));
         pl.NextPage = ChatColor.translateAlternateColorCodes('&', cfg.getString("Settings.Items.Next.Name"));
@@ -136,6 +139,8 @@ public class ConfigManager {
         pl.NotFound = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("NotFound").replaceAll("%prefix%", pl.prefix));
         pl.ChangedCategory = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("ChangedCategory").replaceAll("%prefix%", pl.prefix));
         pl.SearchText = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("SearchText").replaceAll("%prefix%", pl.prefix));
+        pl.NoServerShopAccount = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("NoServerShopAccount").replaceAll("%prefix%", pl.prefix));
+        pl.ServerHasNoMoney = ChatColor.translateAlternateColorCodes('&', MsgConfig.getString("ServerHasNoMoney").replaceAll("%prefix%", pl.prefix));
 
     }
 

@@ -43,8 +43,7 @@ public class ShopCommands implements CommandExecutor {
                 if (sender.hasPermission("servershop.use") || sender.hasPermission("servershop.*")) {
                     if (args.length == 0) {
                         InventoryManager.openServershop((Player) sender);
-                    } else if (args.length > 0) {
-                        if(args[0].equalsIgnoreCase("add")) {
+                    } else if(args[0].equalsIgnoreCase("add")) {
                             if (sender.hasPermission("servershop.add") || sender.hasPermission("servershop.*")) {
                                 if (args.length == 4) {
                                     if (args[1].equalsIgnoreCase("s") || args[1].equalsIgnoreCase("b")) {
@@ -224,7 +223,6 @@ public class ShopCommands implements CommandExecutor {
                             sender.sendMessage(plugin.Help);
                             return true;
                         }
-                    }
                 } else sender.sendMessage(plugin.NoPerm);
             return true;
 

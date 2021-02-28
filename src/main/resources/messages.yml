@@ -39,4 +39,6 @@ HowToSearch: "%prefix% &7Nutze /shop search <input>"
 NotFound: "%prefix% &7Zu deiner Suche: &e&o%input%&7, konnte &cnichts &7gefunden werden!"
 ChangedCategory: "%prefix% &7Du hast die Kategorie in &e&o%category% &7geändert."
 SearchText: "&e&l&oHier klicken &7um nach einem Item zu suchen."
+NoServerShopAccount: "%prefix% &7Es wurde kein Servershop-Account hinterlegt gebe einem Admin bescheid."
+ServerHasNoMoney: "%prefix% &7Der Servershop befindet sich in einer wirtschaftlichen Krise. Komme später nochmal vorbei."
 

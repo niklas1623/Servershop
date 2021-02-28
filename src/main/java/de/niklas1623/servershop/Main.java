@@ -3,9 +3,8 @@ package de.niklas1623.servershop;
 import de.niklas1623.servershop.commands.ShopCommands;
 import de.niklas1623.servershop.commands.onTabShopCommands;
 import de.niklas1623.servershop.utils.InventoryManager;
-import de.niklas1623.servershop.utils.ShopManager;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -128,6 +127,10 @@ public class Main extends JavaPlugin {
     public String MinusName;
     public List<String> MinusDesc = new ArrayList<>();
     public String SearchText;
+    public boolean ServerAccount;
+    public String AccountName;
+    public String NoServerShopAccount;
+    public String ServerHasNoMoney;
 
 
     public static Main getInstance() {

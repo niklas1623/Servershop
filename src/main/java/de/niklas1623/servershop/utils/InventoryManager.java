@@ -7,8 +7,10 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
@@ -18,6 +20,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Level;
 
 public class InventoryManager implements Listener {
     private static Main pl = Main.getInstance();
@@ -210,10 +214,28 @@ public class InventoryManager implements Listener {
 
         gui.setItem(2, 3, ItemBuilder.from(Material.valueOf(pl.AcceptItem)).setName(pl.AcceptName).asGuiItem(event -> {
 
-            if (pl.econ.getBalance(player) >= price[0]) {
+            if (Main.econ.getBalance(player) >= price[0]) {
                 if (!(player.getInventory().firstEmpty() == -1)){
                     player.getInventory().addItem(new ItemStack(Material.valueOf(material), amount[0]));
-                    pl.econ.withdrawPlayer(player, price[0]);
+
+                    if (Main.econ.hasAccount(pl.AccountName)){
+                        player.sendMessage("JA ES GEHT!"+getUUID(pl.AccountName));
+
+                    } else {
+                        player.sendMessage("NEIN ES GEHT NICHT");
+                    }
+                    if (pl.ServerAccount){
+                        if (pl.AccountName != null){
+                            Main.econ.withdrawPlayer(player, price[0]);
+                            addMoneyToServer(price[0]);
+                            player.sendMessage(offlinePlayer().getName());
+                        } else {
+                            player.sendMessage(pl.NoServerShopAccount);
+                            Main.econ.withdrawPlayer(player, price[0]);
+                        }
+                    } else {
+                        Main.econ.withdrawPlayer(player, price[0]);
+                    }
                     player.sendMessage(pl.ItemBuy.replaceAll("%amount%", amount[0] +"").replaceAll("%item%", material.toLowerCase()).replaceAll("%price%", pl.econ.format(price[0])));
                     gui.updateItem(4,5 , ItemBuilder.from(Material.valueOf(pl.CurrentMoneyItem)).setName(pl.CurrentMoney).setLore("§e"+Main.econ.format(Main.econ.getBalance(player))).asGuiItem());
                 } else {
@@ -302,6 +324,22 @@ public class InventoryManager implements Listener {
         if (!overfilled.isEmpty()){
             overfilled.values().forEach(item2 -> player.getWorld().dropItemNaturally(player.getLocation(), item2));
         }
+    }
+    
+    public static void addMoneyToServer(double price){
+        EconomyResponse economyResponse = Main.econ.depositPlayer(offlinePlayer(), price);
+        if (economyResponse.transactionSuccess()){
+            Bukkit.getLogger().log(Level.INFO, pl.getName() + " Added "+Main.econ.format(price)+ " to the Server Account");
+        }
+    }
+
+    public static OfflinePlayer offlinePlayer(){
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(getUUID(pl.AccountName));
+        return offlinePlayer;
+    }
+
+    public static UUID getUUID(String playername) {
+        return Bukkit.getOfflinePlayer(playername).getUniqueId();
     }
 
 

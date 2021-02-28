@@ -24,6 +24,8 @@ Database:
 Settings:
   Servershop:
       Name: "&b&lServershop"
+      ServerAccount: true
+      AccountName: "servershop"
   ItemBuy:
     Name: "&5&lItems kaufen"
     Desc: "&7Kaufe Items im Servershop!"

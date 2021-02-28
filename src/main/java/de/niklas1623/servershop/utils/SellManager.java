@@ -1,7 +1,6 @@
 package de.niklas1623.servershop.utils;
 
 import de.niklas1623.servershop.Main;
-import me.mattstudios.mfgui.gui.components.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,7 +26,31 @@ public class SellManager {
             }
             return;
         }
-        Main.econ.depositPlayer(player, totalSale);
+        if (Main.getInstance().ServerAccount){
+            if (Main.getInstance().AccountName != null){
+                if (Main.econ.getBalance(Main.getInstance().AccountName) >= totalSale){
+                    Main.econ.depositPlayer(player, totalSale);
+                    Main.econ.withdrawPlayer(Main.getInstance().AccountName, totalSale);
+                } else {
+                    player.closeInventory();
+                    player.sendMessage(Main.getInstance().ServerHasNoMoney);
+                    for (int row = 1; row < 5; row++) {
+                        for (int col = 1; col < 8; col++) {
+                            ItemStack itemStack = inventory.getItem(col + row * 9);
+                            if (itemStack != null && itemStack.getType() != Material.AIR){
+                                InventoryManager.returnItem(player, itemStack);
+                            }
+                        }
+                    }
+                    return;
+                }
+            } else {
+                player.sendMessage(Main.getInstance().NoServerShopAccount);
+                Main.econ.depositPlayer(player, totalSale);
+            }
+        } else {
+            Main.econ.depositPlayer(player, totalSale);
+        }
         for (int row = 1; row < 5; row++) {
             for (int col = 1; col < 8; col++) {
                 ItemStack itemStack = inventory.getItem(col + row * 9);
