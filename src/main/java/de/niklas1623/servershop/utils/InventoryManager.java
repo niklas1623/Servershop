@@ -334,8 +334,7 @@ public class InventoryManager implements Listener {
     }
 
     public static OfflinePlayer offlinePlayer(){
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(getUUID(pl.AccountName));
-        return offlinePlayer;
+        return Bukkit.getOfflinePlayer(getUUID(pl.AccountName));
     }
 
     public static UUID getUUID(String playername) {
