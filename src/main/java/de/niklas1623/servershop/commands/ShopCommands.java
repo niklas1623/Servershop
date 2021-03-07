@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ShopCommands implements CommandExecutor {
 
-    Main plugin = null;
+    Main plugin;
     public static String input;
 
     public ShopCommands(Main main) {
@@ -208,7 +208,7 @@ public class ShopCommands implements CommandExecutor {
                             return true;
                         } else if (args[0].equalsIgnoreCase("search") || args[0].equalsIgnoreCase("s")){
                             if (sender.hasPermission("servershop.search") || sender.hasPermission("servershop.*")) {
-                                if (args.length == 2){
+                                if (args.length == 2) {
                                     input = "%"+args[1]+"%";
                                         InventoryManager.selectSearchItem(p);
                                 } else {

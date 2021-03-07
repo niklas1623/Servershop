@@ -45,7 +45,13 @@ public class InventoryManager implements Listener {
 
         GuiItem money = ItemBuilder.from(Material.valueOf(pl.CurrentMoneyItem)).setName(pl.CurrentMoney).setLore("§e"+Main.econ.format(Main.econ.getBalance(player))).asGuiItem();
         ArrayList<String> info = new ArrayList<>();
-        info.add("§8Made by:§7§o niklas1623");
+        List<String> authors = pl.getDescription().getAuthors();
+        info.add("§8Made by:§7§o "+authors.get(0));
+        if (authors.size() > 1) {
+            for (int i = 1; i < pl.getDescription().getAuthors().size(); i++){
+                info.add("§7§o"+pl.getDescription().getAuthors().get(i));
+            }
+        }
         info.add("§8Version: §7§o"+pl.getDescription().getVersion());
 
         GuiItem pluginInfo = ItemBuilder.from(Material.COMMAND_BLOCK).setName("§a§l"+pl.getDescription().getName()).setLore(info).asGuiItem();

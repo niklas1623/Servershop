@@ -1,7 +1,7 @@
 name: Servershop
 main: de.niklas1623.servershop.Main
 version: ${project.version}
-author: niklas1623
+authors: [ niklas1623 ]
 api-version: 1.16
 description: Servershop by niklas1623
 softdepend: [Vault]

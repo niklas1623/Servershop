@@ -61,7 +61,7 @@ public class MenuManager {
 
     public static HashMap<Integer, String> getCategory(){
         HashMap<Integer, String> list = new HashMap<Integer, String>();
-        yml.getKeys(false).forEach(key ->{
+        yml.getKeys(false).forEach(key -> {
             String name = yml.getString(key + ".Name");
             list.put(Integer.valueOf(key.toString()), ChatColor.translateAlternateColorCodes('&', name));
         });
