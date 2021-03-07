@@ -7,5 +7,4 @@ description: Servershop by niklas1623
 softdepend: [Vault]
 
 commands:
-  bits:
   shop:

@@ -4,11 +4,9 @@ import de.niklas1623.servershop.commands.ShopCommands;
 import de.niklas1623.servershop.commands.onTabShopCommands;
 import de.niklas1623.servershop.utils.InventoryManager;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.niklas1623.servershop.commands.MoneyCommands;
 import de.niklas1623.servershop.database.MySQL;
 import net.milkbowl.vault.economy.Economy;
 import de.niklas1623.servershop.utils.ConfigManager;
@@ -54,8 +52,6 @@ public class Main extends JavaPlugin {
     }
 
     private void registerCommands() {
-        MoneyCommands mCMD = new MoneyCommands(this);
-        getCommand("bits").setExecutor(mCMD);
         ShopCommands sCMD = new ShopCommands(this);
         getCommand("shop").setExecutor(sCMD);
         getCommand("shop").setTabCompleter(new onTabShopCommands());
