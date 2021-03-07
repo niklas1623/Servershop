@@ -19,7 +19,7 @@ Database:
   database: servershop
   host: localhost
   port: '3306'
-  Options: "?autoReconnect=true&useSSL=false&AllowPublicKeyRetrieval=true&verifyServerCertificate=true"
+  options: "?autoReconnect=true&useSSL=false&AllowPublicKeyRetrieval=true&verifyServerCertificate=true"
 
 Settings:
   Servershop:
@@ -50,19 +50,19 @@ Settings:
       Name: "&c&lHauptmenü"
       Item: "RED_BED"
     Accept:
-      Item: "LIME_DYE"
       Name: "&a&lKaufen"
+      Item: "LIME_DYE"
     Deny:
-      Item: "RED_DYE"
       Name: "&c&lAbbrechen"
+      Item: "RED_DYE"
     Sell:
-      Item: "SUNFLOWER"
       Name: "&7Verkaufen für: &e%price%"
       Desc: ""
+      Item: "SUNFLOWER"
     Search:
-      Item: "COMPASS"
       Name: "&6&lSuche..."
       Desc: "&7/shop search [Eingabe]"
+      Item: "COMPASS"
     Plus:
       Item: "PLAYER_HEAD"
       HeadID: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWEyZDg5MWM2YWU5ZjZiYWEwNDBkNzM2YWI4NGQ0ODM0NGJiNmI3MGQ3ZjFhMjgwZGQxMmNiYWM0ZDc3NyJ9fX0="
@@ -82,7 +82,7 @@ Settings:
     1:
       Enabled: true
       Slot: 10
-      Item: "OAK_WOOD"
+      Item: 'OAK_WOOD'
       Desc: "&7Kaufe Baumerzeugnisse"
       Name: '&a&lBäume'
       Permission: "servershop.menu.1"

@@ -103,7 +103,7 @@ public class ConfigManager {
         MySQL.database = cfg.getString("Database.database");
         MySQL.host = cfg.getString("Database.host");
         MySQL.port = cfg.getString("Database.port");
-        MySQL.options = cfg.getString("Database.Options");
+        MySQL.options = cfg.getString("Database.options");
 
     }
 
