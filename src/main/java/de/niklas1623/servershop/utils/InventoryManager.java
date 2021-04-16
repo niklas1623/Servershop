@@ -11,10 +11,15 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import de.niklas1623.servershop.Main;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -107,12 +112,12 @@ public class InventoryManager implements Listener {
                 int amount = ShopManager.getAmount(IDinShop);
                 double price = ShopManager.getPrice(IDinShop);
                 String material = ShopManager.getMaterial(IDinShop);
-                shopItem.addItem(ItemBuilder.from(Material.valueOf(material.toUpperCase())).setAmount(amount).setLore("§7" + Main.econ.format(price)).asGuiItem(event -> {
-                    String mat = event.getCurrentItem().getType().name();
-                    openBuyShop(player, mat, IDinShop);
-                }));
-
-
+                if (material != null) {
+                    shopItem.addItem(ItemBuilder.from(Material.valueOf(material.toUpperCase())).setAmount(amount).setLore("§7" + Main.econ.format(price)).asGuiItem(event -> {
+                        String mat = event.getCurrentItem().getType().name();
+                        openBuyShop(player, mat, IDinShop);
+                    }));
+                }
             }
             shopItem.open(player);
             if (shopItem.getNextPageNum() > 1){
@@ -129,6 +134,7 @@ public class InventoryManager implements Listener {
     }
 
     public static void selectSearchItem(Player player){
+        List<Integer> items = new ArrayList<>();
         PaginatedGui shopItem = new PaginatedGui(4,27, "§b§o§l"+ShopCommands.input.replaceAll("%", ""));
 
         shopItem.getFiller().fillBottom(ItemBuilder.from(Material.valueOf(pl.BottomItem)).setName(" ").asGuiItem());
@@ -146,14 +152,16 @@ public class InventoryManager implements Listener {
                     double price = ShopManager.getPrice(IDinShop);
                     String material = ShopManager.getMaterial(IDinShop);
                     if (!(IDinShop == 0)){
+                        items.add(IDinShop);
                         shopItem.addItem(ItemBuilder.from(Material.valueOf(material)).setAmount(amount).setLore("§7" + Main.econ.format(price)).asGuiItem(event -> {
                             String mat = event.getCurrentItem().getType().name();
                             openBuyShop(player, mat, IDinShop);
                         }));
                     }
             }
-            shopItem.open(player);
-            if (shopItem.getInventory().firstEmpty() == 0) {
+            if (items.size() != 0) {
+                shopItem.open(player);
+            } else {
                 player.closeInventory();
                 player.sendMessage(pl.NotFound.replaceAll("%input%", ShopCommands.input.replaceAll("%", "")));
             }
@@ -176,15 +184,21 @@ public class InventoryManager implements Listener {
         }));
         sellShop.setItem(6,1, ItemBuilder.from(Material.valueOf(pl.OneMenuBackItem)).setName(pl.OneMenuBack).asGuiItem(event -> {
             event.setCancelled(true);
+            for (int row = 1; row < 5; row++) {
+                for (int col = 1; col < 8; col++) {
+                    ItemStack itemStack = sellShop.getInventory().getItem(col + row * 9);
+                    if (itemStack != null && itemStack.getType() != Material.AIR){
+                        InventoryManager.returnItem(player, itemStack);
+                    }
+                }
+            }
             openServershop(player);
         }));
+
         double price = 0;
         sellShop.setItem(6 , 5, ItemBuilder.from(Material.valueOf(pl.SellItem)).setName(pl.SellName.replaceAll("%price%", Main.econ.format(price)+"")).setLore(pl.SellDesc).asGuiItem(event -> {
             event.setCancelled(true);
         }));
-
-
-
 
         sellShop.setOpenGuiAction(event -> {
             SellManager.task = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), () -> {
@@ -197,7 +211,7 @@ public class InventoryManager implements Listener {
         });
         sellShop.open(player);
         sellShop.setCloseGuiAction(event -> {
-
+            Bukkit.getScheduler().cancelTask(SellManager.task);
         });
     }
 
@@ -243,6 +257,7 @@ public class InventoryManager implements Listener {
             } else {
                 player.closeInventory();
                 player.sendMessage(pl.NoMoney);
+                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 100, 1);
             }
         }));
         gui.setItem(2, 7, ItemBuilder.from(Material.valueOf(pl.DenyItem)).setName(pl.DenyName).asGuiItem(event -> {
@@ -327,7 +342,7 @@ public class InventoryManager implements Listener {
     public static void addMoneyToServer(double price){
         EconomyResponse economyResponse = Main.econ.depositPlayer(offlinePlayer(), price);
         if (economyResponse.transactionSuccess()){
-            Bukkit.getLogger().log(Level.INFO, pl.getName() + " Added "+Main.econ.format(price)+ " to the Server Account");
+            Bukkit.getLogger().log(Level.INFO, pl.getName() + " » Added "+Main.econ.format(price)+ " to the Server Account");
         }
     }
 
@@ -335,8 +350,8 @@ public class InventoryManager implements Listener {
         return Bukkit.getOfflinePlayer(getUUID(pl.AccountName));
     }
 
-    public static UUID getUUID(String playername) {
-        return Bukkit.getOfflinePlayer(playername).getUniqueId();
+    public static UUID getUUID(String name) {
+        return Bukkit.getOfflinePlayer(name).getUniqueId();
     }
 
 

@@ -61,7 +61,6 @@ public class ShopCommands implements CommandExecutor {
                                                             ShopManager.addItemToShop(ItemID, amount, price, ShopType, category);
                                                             sender.sendMessage(plugin.AddItem.replaceAll("%amount%", amount + "").replaceAll("%price%", plugin.econ.format(price) + "").replaceAll("%item%", mat.toLowerCase()));
                                                         } else sender.sendMessage(plugin.AlreadyInShop);
-                                                        return true;
                                                     } else {
                                                         ShopManager.insertItem(mat);
                                                         int ItemID = ShopManager.getItemID(mat);
@@ -69,8 +68,8 @@ public class ShopCommands implements CommandExecutor {
                                                             ShopManager.addItemToShop(ItemID, amount, price, ShopType, category);
                                                             sender.sendMessage(plugin.AddItem.replaceAll("%amount%", amount + "").replaceAll("%price%", plugin.econ.format(price) + "").replaceAll("%item%", mat.toLowerCase()));
                                                         } else sender.sendMessage(plugin.AlreadyInShop);
-                                                        return true;
                                                     }
+                                                    return true;
                                                 } else sender.sendMessage(plugin.NoAIR);
                                                 return true;
                                             } else sender.sendMessage(plugin.PriceNull);
@@ -201,6 +200,7 @@ public class ShopCommands implements CommandExecutor {
                         } else if(args[0].equalsIgnoreCase("reload")){
                             if (sender.hasPermission("servershop.reload") || sender.hasPermission("servershop.*")) {
                                 plugin.reloadConfig();
+                                ConfigManager.reloadMessages();
                                 ConfigManager.readConfig();
                                 ConfigManager.readMessages();
                                 sender.sendMessage(plugin.Reload);

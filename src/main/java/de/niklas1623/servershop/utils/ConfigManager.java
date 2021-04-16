@@ -54,6 +54,10 @@ public class ConfigManager {
         return MsgConfig;
     }
 
+    public static void reloadMessages(){
+        MsgConfig = YamlConfiguration.loadConfiguration(customConfigFile);
+    }
+
     public static void readConfig() {
         cfg = getConfigFileConfiguration();
         pl.ServerAccount = cfg.getBoolean("Settings.Servershop.ServerAccount");

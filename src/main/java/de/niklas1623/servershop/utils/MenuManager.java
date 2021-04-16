@@ -35,12 +35,14 @@ public class MenuManager {
                 if(description.length() > 0){
                     lore.add(description);
                 }
-                    GuiItem menuItem = ItemBuilder.from(Material.valueOf(itemID.toUpperCase())).setName(name).setLore(lore).asGuiItem(event -> {
+                assert itemID != null;
+                GuiItem menuItem = ItemBuilder.from(Material.valueOf(itemID.toUpperCase())).setName(name).setLore(lore).asGuiItem(event -> {
                         Player player = (Player) event.getWhoClicked();
                         ClickedCategory = Integer.parseInt(key);
                         Category_Name = name;
                         InventoryManager.Category = ClickedCategory;
-                        if (player.hasPermission(permission) || player.hasPermission("servershop.*") || player.hasPermission("servershop.menu.*")){
+                    assert permission != null;
+                    if (player.hasPermission(permission) || player.hasPermission("servershop.*") || player.hasPermission("servershop.menu.*")){
                         InventoryManager.selectBuyItem(player);
                         } else {
                             player.closeInventory();
@@ -60,10 +62,11 @@ public class MenuManager {
     }
 
     public static HashMap<Integer, String> getCategory(){
-        HashMap<Integer, String> list = new HashMap<Integer, String>();
+        HashMap<Integer, String> list = new HashMap<>();
         yml.getKeys(false).forEach(key -> {
             String name = yml.getString(key + ".Name");
-            list.put(Integer.valueOf(key.toString()), ChatColor.translateAlternateColorCodes('&', name));
+            assert name != null;
+            list.put(Integer.valueOf(key), ChatColor.translateAlternateColorCodes('&', name));
         });
         return list;
     }

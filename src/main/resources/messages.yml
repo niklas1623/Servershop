@@ -10,7 +10,7 @@
 #
 
 NoMoney: "%prefix% &7Leider hast du &cnicht &7genug Credits!"
-NoItem: "%prefix% &7Du hast &cnicht &7genug &e%item% &7in deinem Inventar!"
+NoItem: "%prefix% &7Du hast &cnichts &7zu verkaufen!"
 NoPerm: "%prefix% &7Dazu hast du &ckeine &7Berechtigung!"
 NoSpace: "%prefix% &7Dein Iventar ist &cvoll&7!"
 ItemBuy: "%prefix% &7Du hast &aerfolgreich &e%amount% &o%item% &7für &c%price% &7gekauft."

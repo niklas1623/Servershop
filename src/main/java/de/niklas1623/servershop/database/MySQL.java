@@ -51,7 +51,7 @@ public class MySQL {
     public static void createTable() {
         if (isConnected()) {
             try {
-                con.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS items (Material TEXT NOT NULL , ItemID INT NOT NULL AUTO_INCREMENT , PRIMARY KEY (ItemID), UNIQUE (Material))");
+                con.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS items (Material TEXT NOT NULL , ItemID INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (ItemID))");
                 con.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS shop (IDinShop INT NOT NULL AUTO_INCREMENT , ItemID INT NOT NULL , Amount INT NOT NULL , Price INT NOT NULL , ShopType VARCHAR(1) NOT NULL , Category INT NOT NULL , PRIMARY KEY (IDinShop), UNIQUE (ItemID, ShopType))");
 
             } catch (SQLException e) {
