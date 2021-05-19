@@ -10,10 +10,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.logging.Level;
+
 
 public class SellManager {
     public static int IDinShop;
     public static int task;
+    public static String Stack;
 
 
     public static void sellAll(Player player, Inventory inventory) {
@@ -61,6 +64,7 @@ public class SellManager {
             for (int col = 1; col < 8; col++) {
                 ItemStack itemStack = inventory.getItem(col + row * 9);
                 if (itemStack != null) {
+                    Stack = itemStack.getType().toString();
                     int ItemID = ShopManager.getItemID(itemStack.getType().name());
                     if (!(ItemID == 0)){
                         int IDinShop = ShopManager.getIDinShop("s", ItemID);
@@ -98,7 +102,6 @@ public class SellManager {
             if (itemStack != null) {
                 ItemMeta meta = itemStack.getItemMeta();
                 if (meta != null) {
-                    short maxDurability = itemStack.getType().getMaxDurability();
                     if (!meta.hasEnchants() && !meta.hasLore() && !meta.hasAttributeModifiers() && !meta.hasCustomModelData() && !((Damageable) meta).hasDamage()) {
                         int ItemID = ShopManager.getItemID(itemStack.getType().name());
                         IDinShop = ShopManager.getIDinShop("s", ItemID);

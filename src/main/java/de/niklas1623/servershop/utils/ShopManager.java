@@ -2,8 +2,6 @@ package de.niklas1623.servershop.utils;
 
 import de.niklas1623.servershop.database.MySQL;
 
-import java.net.Inet4Address;
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

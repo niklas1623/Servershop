@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.util.HashMap;
@@ -199,10 +200,12 @@ public class ShopCommands implements CommandExecutor {
                             sender.sendMessage(plugin.HowToRemove);
                         } else if(args[0].equalsIgnoreCase("reload")){
                             if (sender.hasPermission("servershop.reload") || sender.hasPermission("servershop.*")) {
-                                plugin.reloadConfig();
+                                Main.getInstance().reloadConfig();
                                 ConfigManager.reloadMessages();
                                 ConfigManager.readConfig();
                                 ConfigManager.readMessages();
+                                MenuManager.yml = ConfigManager.cfg.getConfigurationSection("Settings.menu-items");
+                                InventoryManager.menuItem.update();
                                 sender.sendMessage(plugin.Reload);
                             } else sender.sendMessage(plugin.NoPerm);
                             return true;

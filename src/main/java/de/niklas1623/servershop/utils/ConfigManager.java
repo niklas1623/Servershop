@@ -2,6 +2,7 @@ package de.niklas1623.servershop.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -92,12 +93,14 @@ public class ConfigManager {
         pl.PlusItem = cfg.getString("Settings.Items.Plus.Item");
         pl.PlusHeadID = cfg.getString("Settings.Items.Plus.HeadID");
         pl.PlusName = ChatColor.translateAlternateColorCodes('&', cfg.getString("Settings.Items.Plus.Name"));
+        pl.PlusDesc = new ArrayList<>();
         for (String lore : cfg.getStringList("Settings.Items.Plus.Desc")) {
             pl.PlusDesc.add(ChatColor.translateAlternateColorCodes('&', lore));
         }
         pl.MinusItem = cfg.getString("Settings.Items.Minus.Item");
         pl.MinusHeadID = cfg.getString("Settings.Items.Minus.HeadID");
         pl.MinusName = ChatColor.translateAlternateColorCodes('&', cfg.getString("Settings.Items.Minus.Name"));
+        pl.MinusDesc = new ArrayList<>();
         for (String lore : cfg.getStringList("Settings.Items.Minus.Desc")) {
             pl.MinusDesc.add(ChatColor.translateAlternateColorCodes('&', lore));
         }

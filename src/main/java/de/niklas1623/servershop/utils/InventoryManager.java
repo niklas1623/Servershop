@@ -13,13 +13,9 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import de.niklas1623.servershop.Main;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -32,7 +28,7 @@ public class InventoryManager implements Listener {
     private static final Main pl = Main.getInstance();
     public static int Category;
 
-    public static Gui menuItem = new Gui(6,  Main.getInstance().ServershopName);
+    public static Gui menuItem;
 
     public static void openServershop(Player player) {
         Gui gui = new Gui(3, pl.ServershopName);
@@ -68,7 +64,8 @@ public class InventoryManager implements Listener {
         gui.open(player);
     }
 
-    public static void selectMenu(Player player){
+    public static void selectMenu(Player player) {
+        menuItem = new Gui(6,  Main.getInstance().ServershopName);
         menuItem.getFiller().fillBorder(ItemBuilder.from(Material.valueOf(pl.BorderItem)).setName(" ").asGuiItem());
         menuItem.getFiller().fill(ItemBuilder.from(Material.valueOf(pl.FillingItem)).setName(" ").asGuiItem());
         menuItem.setDefaultClickAction(event -> {

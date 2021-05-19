@@ -3,6 +3,7 @@ package de.niklas1623.servershop;
 import de.niklas1623.servershop.commands.ShopCommands;
 import de.niklas1623.servershop.commands.onTabShopCommands;
 import de.niklas1623.servershop.utils.InventoryManager;
+import de.niklas1623.servershop.utils.MenuManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,6 +28,7 @@ public class Main extends JavaPlugin {
         ConfigManager.readConfig();
         ConfigManager.createMessagesConfig();
         ConfigManager.readMessages();
+        MenuManager.yml = ConfigManager.cfg.getConfigurationSection("Settings.menu-items");
         if (!setupEconomy()) {
             Bukkit.getConsoleSender().sendMessage(prefix+ " Disabled due to no Vault dependency found!");
             Bukkit.getPluginManager().disablePlugin(this);
